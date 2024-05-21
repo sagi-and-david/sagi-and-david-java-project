@@ -124,7 +124,9 @@ public class Main {
 				}
 				break;
 			case 3:
+				//add item to seller
 				while(true) {
+					//loop choose existing seller
 					//add item to seller
 					System.out.println("choose seller: ");
 					printArr(sellers);
@@ -145,7 +147,9 @@ public class Main {
 				String category = reader.next();
 				break;
 			case 4:
+				//case 4 add item to buyer
 				while(true) {
+					//loop choose existing buyer
 					System.out.println("choose buyer: ");
 					printArr(buyers);
 					//buyer name
@@ -155,6 +159,7 @@ public class Main {
 					}
 				}
 				while(true) {
+					//loop choose existing seller
 					System.out.println("choose seller: ");
 					printArr(sellers);
 					//seller name
@@ -165,14 +170,18 @@ public class Main {
 				}
 				break;
 			case 5:
+				//case 5 choose buyer and pay
 				System.out.println("choose buyer you want to pay with: ");
 				printArr(buyers);
+				//buyer name
 				buyerName = reader.next();
 				break;
 			case 6:
+				//case 6 show all buyers
 				printArr(buyers);
 				break;
 			case 7:
+				//case 7 show all sellers
 				printArr(buyers);
 				break;
 			}
