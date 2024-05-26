@@ -197,7 +197,7 @@ public class Main {
 				break;
 			case 7:
 				//case 7 show all sellers
-				printArr(buyers);
+				printArr(sellers);
 				break;
 			}
 		}
