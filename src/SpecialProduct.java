@@ -23,6 +23,6 @@ public class SpecialProduct extends Product{
     public String toString() {
         return super.toString() + " [special=" + special + ", addedPrice=" + addedPrice + "]";
     }
-	
+	//
 
 }
