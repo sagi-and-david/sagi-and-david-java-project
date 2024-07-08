@@ -1,6 +1,7 @@
 //Sagi Galian 214804445
 //David Bekker 328088521
 //teacher: Eyal Eisenstein
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -35,9 +36,10 @@ public class Main {
 		System.out.println("6 - all buyers items list\n");
 		System.out.println("7 - all sellers items list\n");
 		System.out.println("8 - show all items from a category: ");
+		System.out.println("9 - change cart for buyer: ");
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		//initiating the Management class
 		Management management = new Management();
 		
@@ -60,11 +62,22 @@ public class Main {
 			menu();
 			
 			//get input
-			command = reader.nextInt();
-			//switch case between the different commands
+			
+			
+			do {
+	            try {
+	                System.out.print("Enter the Command: ");
+	    			command = reader.nextInt();
+	                break;  // Exit the loop if input is successfully read
+	            } catch (InputMismatchException e) {
+	                System.out.println("Error: Command must be an integer, try again");
+	                reader.next();  // Clear the invalid input from scanner
+	            }
+	        } while (true); 
 			
 			//reset leaveMode flag
 			leaveMode = false;
+			//switch case between the different commands
 			switch(command) {
 			case 0:
 				//case 0 exit
@@ -81,7 +94,7 @@ public class Main {
 						leaveMode = true;
 						break;
 					}
-					sellerIndex = management.findSellerIndexByName(sellerName);
+					sellerIndex = management.findSellerOrBuyerIndexByName(sellerName, false);
 					if(sellerIndex != -1) {
 						System.out.println("Seller already exists");
 					}
@@ -97,7 +110,7 @@ public class Main {
 				}
 				// adding the seller to the array that in the management class
 				if (!leaveMode) {
-					management.addSeller(sellerName, sellerPassword);
+					management.addHuman(sellerName, sellerPassword, null);
 					System.out.println("[ Added seller! ]");	
 					//reset password for next seller
 					sellerPassword = "";
@@ -105,7 +118,8 @@ public class Main {
 				break;
 				
 			case 2:
-
+				buyerAddress = "";
+				buyerPassword = "";
 				//case 2 add buyer
 				//loop for taken name
 				while(!leaveMode) {
@@ -115,7 +129,7 @@ public class Main {
 						leaveMode = true;
 						break;
 					}
-					buyerIndex = management.findBuyerIndexByName(buyerName);
+					buyerIndex = management.findSellerOrBuyerIndexByName(buyerName, true);
 					if(buyerIndex != -1) {
 						System.out.println("Buyer already exists");
 					}
@@ -135,7 +149,7 @@ public class Main {
 				}
 				// adding the buyer to the array that in the management class
 				if (!leaveMode) {
-					management.addBuyer(buyerName, buyerPassword, buyerAddress);
+					management.addHuman(buyerName, buyerPassword, buyerAddress);
 					System.out.println("Buyer added to management class !");					
 				}
 
@@ -156,32 +170,43 @@ public class Main {
 						//if no sellers available quit and leave a message
 						
 						System.out.println("choose seller (an existing one, Type quit to cancel): ");
-						management.displaySellers();
+						management.displayHumans(false);
 						//seller name
 						sellerName = reader.next();
 						if (sellerName.equals("quit".toLowerCase())) {
 							leaveMode = true;
 							break;
 						}
-						sellerIndex = management.findSellerIndexByName(sellerName);
+						sellerIndex = management.findSellerOrBuyerIndexByName(sellerName, false);
 					}
 					if (leaveMode) {
 						break;
 					}
-					System.out.println("enter item name you want to add: ");
+					System.out.println("Enter item name you want to add: ");
 					//item name
 					String item = reader.next();
-					while(management.getSellers()[sellerIndex].getExistingProduct(item) != null) {
+					Seller tempSeller = (Seller)management.getHumans()[sellerIndex]; // cast to seller so we can use the 'getExistingProducts' method
+					while(tempSeller.getExistingProduct(item) != null) {
 						//product already exists
 						System.out.println("item already exists");
 						System.out.println("enter item name you want to add: ");
 						//item name
 						item = reader.next();
 					}	
-					System.out.println("enter item price: ");
 					
 					//item price
-					double itemPrice = reader.nextDouble();
+					double itemPrice;
+					do {
+			            try {
+			                System.out.print("Enter the price: ");
+			                itemPrice = reader.nextDouble();
+			                break;  // Exit the loop if input is successfully read
+			            } catch (InputMismatchException e) {
+			                System.out.println("Error: Price must be a number, try again");
+			                reader.next();  // Clear the invalid input from scanner
+			            }
+			        } while (true); 
+					
 					
 					//item category
 			        String category;
@@ -207,14 +232,25 @@ public class Main {
 			        //check for wrap if yes get added cost else normal product
 			        if (specialWrap.toLowerCase().equals("yes")) {
 			            System.out.println("Enter the additional cost for the special wrap: ");
-			            double addedCost = reader.nextDouble();
+			            double addedCost;
+			            do {
+				            try {
+				                System.out.print("Enter the price: ");
+				                addedCost = reader.nextDouble();
+				                break;  // Exit the loop if input is successfully read
+				            } catch (InputMismatchException e) {
+				                System.out.println("Error: Price must be a number, try again");
+				                reader.next();  // Clear the invalid input from scanner
+				            }
+				        } while (true); 
 			            product = new SpecialProduct(item, itemPrice, category, true, addedCost);
 			        } 
 			        else {
 			            product = new Product(item, itemPrice, category);
 			        }
 					// add product to seller
-					management.getSellers()[sellerIndex].addProduct(product);
+			        tempSeller = (Seller)management.getHumans()[sellerIndex]; // same casting as before
+					tempSeller.addProduct(product);
 					System.out.println("Product added!");
 					break;
 				}
@@ -225,24 +261,24 @@ public class Main {
 				while(buyerIndex == -1) {
 					//loop choose existing buyer
 					System.out.println("choose buyer (Type quit to cancel): ");
-					management.displayBuyers();
+					management.displayHumans(true);
 					//buyer name
 					buyerName = reader.next();
 					if (buyerName.equals("quit".toLowerCase())) {
 						leaveMode = true;
 						break;
 					}
-					buyerIndex = management.findBuyerIndexByName(buyerName);
+					buyerIndex = management.findSellerOrBuyerIndexByName(buyerName, true);
 				}
 				
 				sellerIndex = -1;
 				while(sellerIndex == -1 && leaveMode == false) {
 					//loop choose existing seller
 					System.out.println("choose seller: ");
-					management.displaySellers();
+					management.displayHumans(false);
 					//seller name
 					sellerName = reader.next();
-					sellerIndex = management.findSellerIndexByName(sellerName);
+					sellerIndex = management.findSellerOrBuyerIndexByName(sellerName, false);
 				}
 				if (leaveMode) {
 					break;
@@ -252,23 +288,25 @@ public class Main {
 				Product chosenProduct = null;
 				//buyer is choosing a product
 				//displaying the products of the chosen seller
-				System.out.println(sellerIndex);
 				//get seller
-				Seller chosenSeller = management.getSellers()[sellerIndex];
+				Seller chosenSeller = (Seller)management.getHumans()[sellerIndex];
 				//System.out.println(chosenSeller.getName()); // remove 
 				chosenSeller.displayProducts();
 				if (chosenSeller.getProducts()[0] != null) {
 					
+					Seller tempSeller;
 					while(true) {
 						//loop choose existing product
 						System.out.println("choose product: ");
 						productName = reader.next();
-						chosenProduct = management.getSellers()[sellerIndex].getExistingProduct(productName);
+						tempSeller = (Seller)management.getHumans()[sellerIndex];
+						chosenProduct = tempSeller.getExistingProduct(productName);
 						if (chosenProduct != null) {
 							break;
 						}
 					}
-					management.buyers[buyerIndex].addProduct(chosenProduct.getName(), chosenProduct.getPrice(), chosenProduct.getCategory());
+					Buyer tempBuyer = (Buyer)management.getHumans()[buyerIndex];
+					tempBuyer.addProduct(chosenProduct.getName(), chosenProduct.getPrice(), chosenProduct.getCategory());
 					System.out.println("Product Added. ");
 				}
 				else {
@@ -277,8 +315,9 @@ public class Main {
 				break;
 			case 5:
 				//case 5 choose buyer and pay
-				System.out.println("choose buyer you want to pay with (Type quit to cancel): ");
-				management.displayBuyers();
+				/*
+				System.out.println("Choose buyer you want to pay with (Type quit to cancel): ");
+				management.displayHumans(true);
 				//buyer name
 				int chosenBuyerIndex = -1;
 				do {
@@ -287,17 +326,46 @@ public class Main {
 						leaveMode = true;
 						break;
 					}
-					chosenBuyerIndex = management.findBuyerIndexByName(buyerName);
+					chosenBuyerIndex = management.findSellerOrBuyerIndexByName(buyerName, true);
 				}while(chosenBuyerIndex == -1);
 				if (leaveMode) {
 					break;
+				}*/
+				
+				
+				
+				while(!leaveMode) {
+					management.displayHumans(true);
+					System.out.print("Enter buyer's name (Type quit to cancel): ");
+					buyerName = reader.next();
+					if (buyerName.equals("quit".toLowerCase())) {
+						leaveMode = true;
+						break;
+					}
+					buyerIndex = management.findSellerOrBuyerIndexByName(buyerName, true);
+					if(buyerIndex == -1) {
+						System.out.println("Buyer doesnt exists!, try again.");
+					}
+					else {
+						break;
+					}	
 				}
-				// show the cart, the total price.
-				System.out.println("Here is your cart: ");
-				Buyer buyer = management.getBuyers()[chosenBuyerIndex];
-				buyer.displayProducts();
-				System.out.println("Total price of: " + buyer.cartPrice());
-				management.getBuyers()[chosenBuyerIndex].moveToPreviousCarts();
+				
+				
+				// show the cart, the total price.				
+				Buyer buyer = (Buyer)management.getHumans()[buyerIndex];
+				try {
+		            if (buyer.getProductsCount() == 0) {
+		                throw new Exception("The cart is empty!");
+		            } else {
+		                System.out.println("Here is your cart: ");
+		                buyer.displayProducts();
+		                System.out.println("Total price of: " + buyer.cartPrice());
+		                buyer.moveToPreviousCarts();
+		            }
+		        } catch (Exception e) {
+		            System.out.println("Error: " + e.getMessage());
+		        }
 				break;
 			case 6:
 				//case 6 show all buyers
@@ -325,6 +393,64 @@ public class Main {
 					break;
 				}
 				management.displayAllItemsFromACategory(category);
+				break;
+				
+			case 9:
+				while(!leaveMode) {
+					management.displayHumans(true);
+					System.out.print("Enter buyer's name (Type quit to cancel): ");
+					buyerName = reader.next();
+					if (buyerName.equals("quit".toLowerCase())) {
+						leaveMode = true;
+						break;
+					}
+					buyerIndex = management.findSellerOrBuyerIndexByName(buyerName, true);
+					if(buyerIndex == -1) {
+						System.out.println("Buyer doesnt exists!, try again.");
+					}
+					else {
+						break;
+					}	
+				}
+				// show the cart, the total price.				
+				Buyer temporaryBuyer = (Buyer)management.getHumans()[buyerIndex];
+				
+				if (temporaryBuyer.getProducts().length > 0) {
+					System.out.println("Your currect cart is not empty, are you sure you want to proceed? (yes/no): ");
+			        String result = reader.next();
+					while(!result.toLowerCase().equals("yes") && !result.toLowerCase().equals("no")) {
+						//enter if answer isn't yes or no is wrong exit if category is right
+						System.out.println("wrong answer choose again");
+						System.out.println("Does the product have a special wrap? (yes/no): ");
+						result = reader.next();
+					}
+					if (result.equals("no")) {
+						System.out.println("Your cart remained the same.");
+						break;
+					}
+				}
+				
+				temporaryBuyer.displayPreviousCarts();
+				int cartNumber;
+				do {
+		            try {
+		                System.out.print("Enter wanted cart: ");
+		    			cartNumber = reader.nextInt();
+		    			if (cartNumber >= temporaryBuyer.getPreviousCarts().length || cartNumber < 0) {
+		    				throw new Exception("There is no cart indexed " + cartNumber);
+		    			}
+		                break;  // Exit the loop if input is successfully read
+		            } catch (Exception e) {
+		                System.out.println("Error: " + e.getMessage());
+		                reader.next();  // Clear the invalid input from scanner
+		            }
+		        } while (true); 
+				
+				// setting the prev cart to the new cart
+				temporaryBuyer.setProducts(temporaryBuyer.getPreviousCarts()[cartNumber].getProducts());
+				System.out.println("[SUCCESS] Your cart has been updated !");
+				
+				
 				break;
 			}
 		}
