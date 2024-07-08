@@ -313,27 +313,7 @@ public class Main {
 					System.out.println("There are no products in the store");
 				}
 				break;
-			case 5:
-				//case 5 choose buyer and pay
-				/*
-				System.out.println("Choose buyer you want to pay with (Type quit to cancel): ");
-				management.displayHumans(true);
-				//buyer name
-				int chosenBuyerIndex = -1;
-				do {
-					buyerName = reader.next();
-					if (buyerName.equals("quit".toLowerCase())) {
-						leaveMode = true;
-						break;
-					}
-					chosenBuyerIndex = management.findSellerOrBuyerIndexByName(buyerName, true);
-				}while(chosenBuyerIndex == -1);
-				if (leaveMode) {
-					break;
-				}*/
-				
-				
-				
+			case 5:	
 				while(!leaveMode) {
 					management.displayHumans(true);
 					System.out.print("Enter buyer's name (Type quit to cancel): ");
