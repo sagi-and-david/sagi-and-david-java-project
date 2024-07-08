@@ -1,4 +1,3 @@
-
 public class Management{
 	Buyer[] buyers;
 	Seller[] sellers;
@@ -105,6 +104,36 @@ public class Management{
 			//print info of seller
 			System.out.println("Seller name: " + this.sellers[i].getName() + " Seller password: " + this.sellers[i].getPassword());
 			this.sellers[i].displayProducts();
+		}
+	}
+	
+	public void displayAllItemsFromACategory(String category) {
+		for (int i = 0; i < this.sellers.length; i++) {
+			//using the get methods in the Seller class
+			if (this.sellers[i] == null) {
+				//if null no seller exists
+				break;
+			}
+			//run on products from seller and if product from category print it
+			for(int j = 0; j < this.sellers[i].getProducts().length; j++) {
+				if(this.sellers[i].getProducts() == null) {
+					//if null no products exit
+					break;
+				}
+				if(this.sellers[i].getProducts()[j] == null) {
+					//if null end of products in product array or no products in products array then exit
+					break;
+				}
+				if(this.sellers[i].getProducts()[j].getCategory() == null) {
+					//no category
+					break;
+				}
+				if(this.sellers[i].getProducts()[j].getCategory().equals(category)) {
+					//if product category fits category then print
+					System.out.println(this.sellers[i].getProducts()[j].toString());
+				}
+			}
+			
 		}
 	}
 	

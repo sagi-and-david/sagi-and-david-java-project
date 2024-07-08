@@ -1,4 +1,6 @@
-//Sagi Galian And David Bekker
+//Sagi Galian 214804445
+//David Bekker 328088521
+//teacher: Eyal Eisenstein
 import java.util.Scanner;
 
 public class Main {
@@ -10,8 +12,8 @@ public class Main {
 		
 	//create reader
 	private static Scanner reader = new Scanner(System.in);
-	
-// function to handle exit
+		
+	// function to handle exit
 	public static void exit() {
 		//case 0 exit
 		System.out.println("[Exiting] bye");
@@ -31,7 +33,8 @@ public class Main {
 		System.out.println("4 - add item to buyer\n");
 		System.out.println("5 - customer pay\n");
 		System.out.println("6 - all buyers items list\n");
-		System.out.println("7 - all sellers items list: ");
+		System.out.println("7 - all sellers items list\n");
+		System.out.println("8 - show all items from a category: ");
 	}
 	
 	public static void main(String[] args) {
@@ -71,7 +74,7 @@ public class Main {
 				//case 1 add seller
 				//loop for taken name
 				
-				while(leaveMode == false) {
+				while(!leaveMode) {
 					System.out.print("Enter seller name (Type quit to cancel): ");
 					sellerName = reader.next();
 					if (sellerName.equals("quit".toLowerCase())) {
@@ -88,12 +91,12 @@ public class Main {
 				}
 				
 				//asking for the seller`s password
-				while (sellerPassword.trim() == "" && leaveMode == false) {
+				while (sellerPassword.trim() == "" && !leaveMode) {
 					System.out.print("Enter seller password (Type quit to cancel): ");
 					sellerPassword = reader.next();
 				}
 				// adding the seller to the array that in the management class
-				if (leaveMode == false) {
+				if (!leaveMode) {
 					management.addSeller(sellerName, sellerPassword);
 					System.out.println("[ Added seller! ]");	
 					//reset password for next seller
@@ -105,7 +108,7 @@ public class Main {
 
 				//case 2 add buyer
 				//loop for taken name
-				while(leaveMode == false) {
+				while(!leaveMode) {
 					System.out.print("Enter buyer's name (Type quit to cancel): ");
 					buyerName = reader.next();
 					if (buyerName.equals("quit".toLowerCase())) {
@@ -131,7 +134,7 @@ public class Main {
 					buyerAddress = reader.next();
 				}
 				// adding the buyer to the array that in the management class
-				if (leaveMode == false) {
+				if (!leaveMode) {
 					management.addBuyer(buyerName, buyerPassword, buyerAddress);
 					System.out.println("Buyer added to management class !");					
 				}
@@ -162,7 +165,7 @@ public class Main {
 						}
 						sellerIndex = management.findSellerIndexByName(sellerName);
 					}
-					if (leaveMode == true) {
+					if (leaveMode) {
 						break;
 					}
 					System.out.println("enter item name you want to add: ");
@@ -176,14 +179,42 @@ public class Main {
 						item = reader.next();
 					}	
 					System.out.println("enter item price: ");
-					//item price
-					double itemPrice = reader.nextInt();
-					System.out.println("enter item category: ");
-					//item category
-					String category = reader.next();
 					
+					//item price
+					double itemPrice = reader.nextDouble();
+					
+					//item category
+			        String category;
+			        while (true) {
+			            System.out.println("Enter item category (kids, electricity, office, clothes): ");
+			            category = reader.next();
+			            if (Categories.contains(category.toLowerCase())) {
+			                break;
+			            } else {
+			                System.out.println("Invalid category. Please choose again.");
+			            }
+			        }
+					
+					System.out.println("Does the product have a special wrap? (yes/no): ");
+			        String specialWrap = reader.next();
+					while(!specialWrap.toLowerCase().equals("yes") && !specialWrap.toLowerCase().equals("no")) {
+						//enter if answer isn't yes or no is wrong exit if category is right
+						System.out.println("wrong answer choose again");
+						System.out.println("Does the product have a special wrap? (yes/no): ");
+						specialWrap = reader.next();
+					}
+			        Product product;
+			        //check for wrap if yes get added cost else normal product
+			        if (specialWrap.toLowerCase().equals("yes")) {
+			            System.out.println("Enter the additional cost for the special wrap: ");
+			            double addedCost = reader.nextDouble();
+			            product = new SpecialProduct(item, itemPrice, category, true, addedCost);
+			        } 
+			        else {
+			            product = new Product(item, itemPrice, category);
+			        }
 					// add product to seller
-					management.getSellers()[sellerIndex].addProduct(item, itemPrice, category);
+					management.getSellers()[sellerIndex].addProduct(product);
 					System.out.println("Product added!");
 					break;
 				}
@@ -213,7 +244,7 @@ public class Main {
 					sellerName = reader.next();
 					sellerIndex = management.findSellerIndexByName(sellerName);
 				}
-				if (leaveMode == true) {
+				if (leaveMode) {
 					break;
 				}
 				System.out.println("Here are the products you can find in " + sellerName + "`s store");
@@ -258,7 +289,7 @@ public class Main {
 					}
 					chosenBuyerIndex = management.findBuyerIndexByName(buyerName);
 				}while(chosenBuyerIndex == -1);
-				if (leaveMode == true) {
+				if (leaveMode) {
 					break;
 				}
 				// show the cart, the total price.
@@ -276,7 +307,25 @@ public class Main {
 				//case 7 show all sellers
 				management.displaySellersWithProducts();
 				break;
-
+			
+			case 8:
+				System.out.println("choose category (kids, electricity, office, clothes) type quit to cancel");
+				String category = reader.next();
+				if (category.equals("quit".toLowerCase())) {
+					leaveMode = true;
+					break;
+				}
+				while(!Categories.contains(category)) {
+					//enter if category is wrong exit if category is right
+					System.out.println("wrong category choose again");
+					System.out.println("choose category (kids, electricity, office, clothes) type quit to cancel");
+					category = reader.next();
+				}
+				if(leaveMode) {
+					break;
+				}
+				management.displayAllItemsFromACategory(category);
+				break;
 			}
 		}
 	}

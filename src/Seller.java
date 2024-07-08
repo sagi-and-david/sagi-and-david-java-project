@@ -40,11 +40,11 @@ public class Seller {
 		this.products = newProductsArray;
 	}
 	
-	public void addProduct(String name, double price, String category) {
+	public void addProduct(Product product) {
 		if (this.productsCount >= this.products.length) {
 			this.expandProduct();
 		}
-		this.products[this.productsCount] = new Product(name, price, category);
+		this.products[this.productsCount] = product;
 		
 		this.productsCount++;
 	}
