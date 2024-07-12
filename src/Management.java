@@ -1,150 +1,159 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+
 public class Management{
-	Buyer[] buyers;
-	Seller[] sellers;
+
+	int humansCount;
+	Human[] humans;
 	int sellersCount;
 	int buyersCount;
 	
 	public Management() {
-		this.buyers = new Buyer[10];// initiating with 10 if needed will be expanded
-		this.sellers = new Seller[10];// initiating with 10 if needed will be expanded
+
+		this.humans = new Human[10];
+		this.humansCount = 0;
 		this.sellersCount = 0;
 		this.buyersCount = 0;
+	}
+	
+
+	public Human[] getHumans() {
+		return humans;
+	}
+	
+	public void addHuman(String name, String password, String address) { // if address is null the human is seller
+		if (this.humansCount >= this.humans.length) {
+			this.expandHumansArray();
+		}
+		if (address == null) {
+			this.humans[humansCount] = new Seller(name, password);
+			this.humansCount++;
+			this.sellersCount++;
+		}else {
+			this.humans[humansCount] = new Buyer(name, password, address);
+			this.humansCount++;
+			this.buyersCount++;
+		}
+	}
+
+	public String displayHumans(boolean isBuyer) {
 		
-		// adding buyer and seller for checking
-		/*
-		this.buyers[0] = new Buyer("sagi","password1","maale adumim");
-		this.sellers[0] = new Seller("david","password2");
+		String printText = "";
 		
-		this.sellers[0].addProduct("milk", 12, "FOOD");
-		this.sellers[0].addProduct("shirt", 89, "CLOTHS");
-		this.sellers[0].addProduct("wallet", 330, "SPECIAL");
-		this.sellers[0].addProduct("ball", 33, "SPORT");
-
-		this.sellersCount++;
-		this.buyersCount++;
-		*/
-	}
-	
-	public Buyer[] getBuyers() {
-		return buyers;
-	}
-
-	public Seller[] getSellers() {
-		return sellers;
-	}
-	
-	public void addSeller(String name, String password) {
-		if (this.sellersCount >= this.sellers.length) {
-			this.expandSellersArray();
-		}
-		this.sellers[sellersCount] = new Seller(name, password);
-		this.sellersCount++;
-	}
-	
-	public void addBuyer(String name, String password, String address) {
-		if (this.buyersCount >= this.buyers.length) {
-			this.expandBuyersArray();
-		}
-		//System.out.println("index that will be in: " + buyersCount);
-		this.buyers[buyersCount] = new Buyer(name, password, address);
-		this.buyersCount++;
-	}
-	
-	public void displayBuyers() {
-		//displays buyers without cart
-		for (int i = 0; i < this.buyers.length; i++) {
+		for (int i = 0; i < this.humans.length; i++) {
 			//using the get methods in the Buyer class
-			if (this.buyers[i] == null) {
+			if (this.humans[i] == null) {
 				break;
-			}
-			System.out.println("Buyer name: " + this.buyers[i].getName() + " Buyer password: " + this.buyers[i].getPassword() + " Buyer address: " + this.buyers[i].getAddress());
-		}
-	}
-	
-	public void displayBuyersWithCart() {
-		//displays buyers with cart
-		for (int i = 0; i < this.buyers.length; i++) {
-			//using the get methods in the Buyer class
-			if (this.buyers[i] == null) {
-				break;
-			}
-			//print full buyer info
-			System.out.println("Buyer name: " + this.buyers[i].getName() + " Buyer password: " + this.buyers[i].getPassword() + " Buyer address: " + this.buyers[i].getAddress());
-			if(this.buyers[i].getProducts() != null) {
-				System.out.println("current cart: ");
-				this.buyers[i].displayProducts();
-
-			}
-			if(this.buyers[i].getPreviousCarts() != null) {
-				System.out.println("previous carts: ");
-				this.buyers[i].displayPreviousCarts();
-			}
-		}
-	}
-	
-	public void displaySellers() {
-		//displays sellers without products
-		for (int i = 0; i < this.sellers.length; i++) {
-			//using the get methods in the Seller class
-			if (this.sellers[i] == null) {
-				break;
-			}
-			System.out.println("Seller name: " + this.sellers[i].getName() + " Seller password: " + this.sellers[i].getPassword());
-		}
-	}
-	
-	public void displaySellersWithProducts() {
-		//displays sellers with products
-		for (int i = 0; i < this.sellers.length; i++) {
-			//using the get methods in the Seller class
-			if (this.sellers[i] == null) {
-				//if null no seller exists
-				break;
-			}
-			//print info of seller
-			System.out.println("Seller name: " + this.sellers[i].getName() + " Seller password: " + this.sellers[i].getPassword());
-			this.sellers[i].displayProducts();
-		}
-	}
-	
-	public void displayAllItemsFromACategory(String category) {
-		for (int i = 0; i < this.sellers.length; i++) {
-			//using the get methods in the Seller class
-			if (this.sellers[i] == null) {
-				//if null no seller exists
-				break;
-			}
-			//run on products from seller and if product from category print it
-			for(int j = 0; j < this.sellers[i].getProducts().length; j++) {
-				if(this.sellers[i].getProducts() == null) {
-					//if null no products exit
-					break;
-				}
-				if(this.sellers[i].getProducts()[j] == null) {
-					//if null end of products in product array or no products in products array then exit
-					break;
-				}
-				if(this.sellers[i].getProducts()[j].getCategory() == null) {
-					//no category
-					break;
-				}
-				if(this.sellers[i].getProducts()[j].getCategory().equals(category)) {
-					//if product category fits category then print
-					System.out.println(this.sellers[i].getProducts()[j].toString());
-				}
 			}
 			
-		}
+			if (isBuyer) {
+				if (humans[i] instanceof Buyer) {
+					printText += ((Buyer)humans[i]).toString() + "\n";
+				}
+			}else {
+				if (humans[i] instanceof Seller) {
+					printText += ((Seller)humans[i]).toString() + "\n";
+				}
+			}
+		} 
+		return printText;
 	}
 	
-	private void expandSellersArray() {
-		Seller[] newSellersArray = new Seller[this.sellers.length * 2];
-		for (int i = 0; i < this.sellers.length; i++) {
-			newSellersArray[i] = this.sellers[i];
-		}
-		this.sellers = newSellersArray;
+	public String displayBuyersWithCart() {
+	    // Create an array of Buyers
+	    Buyer[] buyers = new Buyer[buyersCount];
+
+	    // Populate the array with Buyers
+	    int index = 0;
+	    
+	    String printText = "";
+	    
+	    for (Human human : humans) {
+	        if (human instanceof Buyer) {
+	            buyers[index++] = (Buyer) human;
+	        }
+	    }
+
+	    // Sort buyers based on name using Comparator
+	    Arrays.sort(buyers, Comparator.comparing(Buyer::getName));
+
+	    // Print buyers with their carts
+	    for (Buyer buyer : buyers) {
+	        printText += "Buyer name: " + buyer.getName() + " Buyer password: " + buyer.getPassword() + " Buyer address: " + buyer.getAddress() + "\n";
+	        if (buyer.getProducts() != null) {
+	            printText += "current cart: \n";
+	            printText += buyer.displayProducts() + "\n";
+	        }
+	        if (buyer.getPreviousCarts() != null) {
+	            printText += "previous carts: \n";
+	            printText += buyer.displayPreviousCarts() + "\n";
+	        }	        
+	    }
+	    return printText;
 	}
-	
+
+	public String displaySellersWithProducts() {
+	    // Create an array of Sellers
+	    Seller[] sellers = new Seller[sellersCount];
+
+	    // Populate the array with Sellers
+	    int index = 0;
+	    
+	    String printText = "";
+	    
+	    for (Human human : humans) {
+	        if (human instanceof Seller) {
+	            sellers[index++] = (Seller) human;
+	        }
+	    }
+
+	    // Sort sellers based on product count in descending order using Comparator
+	    Arrays.sort(sellers, Comparator.comparingInt(Seller::getProductsCount).reversed());
+
+	    // Print sellers with their products
+	    for (Seller seller : sellers) {
+	    	printText += "Seller name: " + seller.getName() + " Seller password: " + seller.getPassword() + "\n";
+	        printText += seller.displayProducts() + "\n";
+	    }
+	    return printText;
+	}
+
+	public String displayAllItemsFromACategory(String category) {
+		String printText = "";
+		for (int i = 0; i < this.humans.length; i++) {
+			//using the get methods in the Seller class
+			if (this.humans[i] == null) {
+				//if null no seller exists
+				break;
+			}
+			if (humans[i] instanceof Seller) {
+				Seller tempSeller = (Seller)humans[i];
+				//run on products from seller and if product from category print it
+				for(int j = 0; j < tempSeller.getProducts().length; j++) {
+					if(tempSeller.getProducts() == null) {
+						//if null no products exit
+						break;
+					}
+					if(tempSeller.getProducts()[j] == null) {
+						//if null end of products in product array or no products in products array then exit
+						break;
+					}
+					if(tempSeller.getProducts()[j].getCategory() == null) {
+						//no category
+						break;
+					}
+					if(tempSeller.getProducts()[j].getCategory().equals(category)) {
+						//if product category fits category then print
+						printText += tempSeller.getProducts()[j].toString() + "\n";
+					}
+				}
+			}
+		}
+		return printText;
+	}
+
 	public int getSellersCount() {
 		return sellersCount;
 	}
@@ -153,64 +162,59 @@ public class Management{
 		return buyersCount;
 	}
 
-	private void expandBuyersArray() {
-		Buyer[] newBuyersArray = new Buyer[this.buyers.length * 2];
-		for (int i = 0; i < this.buyers.length; i++) {
-			newBuyersArray[i] = this.buyers[i];
+	private void expandHumansArray() {
+		Human[] newHumansArray = new Human[this.humans.length * 2];
+		for (int i = 0; i < this.humans.length; i++) {
+			newHumansArray[i] = this.humans[i];
 		}
-		this.buyers = newBuyersArray;
+		this.humans = newHumansArray;
 	}
 	
-	public boolean checkBuyerExistance(String newBuyerName) {
-		for(int i = 0; i < buyers.length; i++) {
-			if (buyers[i] == null) {
+	public boolean checkBuyerExistance(String humanName, boolean isBuyer) {
+		for(int i = 0; i < humans.length; i++) {
+			if (humans[i] == null) {
 				return false;
+			}
+			if (isBuyer) {
+				if (humans[i] instanceof Buyer) {
+					if (humans[i].getName().equals(humanName)) {
+						return true;
+					}					
+				}
 			}else {
-				if (buyers[i].getName().equals(newBuyerName)) {
-					return true;
+				if (humans[i] instanceof Seller) {
+					if (humans[i].getName().equals(humanName)) {
+						return true;
+					}					
 				}
 			}
+			
 		}
 		return false;
 	}
 	
-	public boolean checkSellerExistance(String newSellerName) {
-		for(int i = 0; i < sellers.length; i++) {
-			if (sellers[i] == null) {
-				return false;
-				
-			}else {
-				if (sellers[i].getName().equals(newSellerName)) {
-					return true;
-					
-				}
-			}
-		}
-		return false;
-	}
-	
-	public int findSellerIndexByName(String name) {
-		for (int i = 0; i < this.sellers.length; i++) {
-			if (this.sellers[i] == null) {
+	public int findSellerOrBuyerIndexByName(String name, boolean isBuyer) {
+		
+		for (int i = 0; i < humans.length; i++) {
+			if (this.humans[i] == null) {
 				return -1;
 			}
-			if (this.sellers[i].getName().equals(name)) {
-				return i;
+			if (isBuyer) {
+				if (humans[i] instanceof Buyer) {
+					if (humans[i].getName().equals(name)) {
+						return i;
+					}					
+				}
+			}else {
+				if (humans[i] instanceof Seller) {
+					if (humans[i].getName().equals(name)) {
+						return i;
+					}					
+				}
 			}
 		}
 		return -1;
 	}
 	
-	public int findBuyerIndexByName(String name) {
-		for (int i = 0; i < this.buyers.length; i++) {
-			if (this.buyers[i] == null) {
-				return -1;
-			}
-			if (this.buyers[i].getName().equals(name)) {
-				return i;
-			}
-		}
-		return -1;
-	}
 	
 }

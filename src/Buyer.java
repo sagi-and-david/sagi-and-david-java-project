@@ -1,33 +1,26 @@
+import java.util.Arrays;
 import java.util.Date;
 
-public class Buyer {
-	private String name;
-	private String password;
+public class Buyer extends Human{
 	private String address;
 	private Product[] products;
 	private Cart[] previousCarts;
 	private int productsCount;
+	
 	private int previousCartsCount;
 	
 	//constructor
 	public Buyer(String name, String password, String address) {
-		this.name = name;
-		this.password = password;
+		super(name, password);
 		this.address = address;
 		this.products = new Product[10]; // initiating with 10 if needed will be expanded
 		this.productsCount = 0;
 		this.previousCarts = new Cart[10];//initiating empty array in length 10 will expand if needed
 		this.previousCartsCount = 0;
 	}
-	
-	public String getPassword() {
-		return this.password;
+	public int getProductsCount() {
+		return productsCount;
 	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public String getAddress() {
 		return this.address;
 	}
@@ -46,14 +39,6 @@ public class Buyer {
 
 	public void setProducts(Product[] products) {
 		this.products = products;
-	}
-	
-	public String getName() {
-		return this.name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
 	}
 	
 	private Product[] expandProductArray(Product[] array) {
@@ -84,25 +69,30 @@ public class Buyer {
 	}
 	
 	//display each product using the display method in "Product class"
-	public void displayProducts() {
+	public String displayProducts() {
+		String printText = "";
 		for(int i = 0; i < this.products.length; i++) {
 			if (this.products[i] == null) {
 				break;
 			}
-			 System.out.println(this.products[i].toString());
+			 printText += this.products[i].toString() + "\n";
 		}
+		return printText;
 	}
 	
 	//display each previous product using the display method in "Product class"
-	public void displayPreviousCarts() {
+	public String displayPreviousCarts() {
+		String printText = "";
 		for(int i = 0; i < this.previousCarts.length; i++) {
 			if (this.previousCarts[i] == null) {
 				break;
 			}
-			 System.out.println(this.previousCarts[i].toString());
+			printText += i + ". " + this.previousCarts[i].toString() + "\n";
 		}
+		return printText;
 	}
 	
+
 	//calculating the sum of the products in the products array.
 	public double cartPrice() {
 		double sum = 0;
@@ -133,5 +123,13 @@ public class Buyer {
 			this.previousCartsCount++;
 			this.productsCount = 0;
 		}
+	}
+	@Override
+	public String toString() {
+		return super.toString() + " " + "Buyer [address=" + address + ", products=" + Arrays.toString(products) + ", previousCarts="
+				+ Arrays.toString(previousCarts) + ", productsCount=" + productsCount + ", previousCartsCount="
+				+ previousCartsCount + "]";
+		
+		
 	}
 }

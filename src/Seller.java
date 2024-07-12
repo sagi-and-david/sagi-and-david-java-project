@@ -1,31 +1,17 @@
+import java.util.Arrays;
 
-public class Seller {
-	private String name;
-	private String password;
+public class Seller extends Human {
 	private Product[] products;
 	private int productsCount;
 	
+	public int getProductsCount() {
+		return productsCount;
+	}
+
 	public Seller(String name, String password) {
-		this.name = name;
-		this.password = password;
+		super(name, password);
 		this.products = new Product[10]; // initiating with 10 if needed will be expanded
 		this.productsCount = 0;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getPassword() {
-		return this.password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public Product[] getProducts() {
@@ -39,7 +25,8 @@ public class Seller {
 		}
 		this.products = newProductsArray;
 	}
-	
+
+
 	public void addProduct(Product product) {
 		if (this.productsCount >= this.products.length) {
 			this.expandProduct();
@@ -49,14 +36,15 @@ public class Seller {
 		this.productsCount++;
 	}
 	
-	public void displayProducts() {
+	public String displayProducts() {
+		String printText = "";
 		for(int i = 0; i < this.products.length; i++) {
 			if (this.products[i] == null) {
 				break;
 			}
-		 
-		 System.out.println(products[i].toString());
+		 printText += products[i].toString() + "\n";
 		}
+		return printText;
 	}
 	
 	public Product getExistingProduct(String productName) {
@@ -70,5 +58,11 @@ public class Seller {
 		}
 		return null;
 	}
+
+	@Override
+	public String toString() {
+		return super.toString() + " " + "Seller [products=" + Arrays.toString(products) + ", productsCount=" + productsCount + "]";
+	}
+	
 	
 }

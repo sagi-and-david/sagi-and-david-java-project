@@ -1,9 +1,5 @@
 
 public class SpecialProduct extends Product{
-	private String name;
-	private double price;
-	private String category;
-	private int seiralNumber;
 	private boolean special;
 	private double addedPrice;
 	public SpecialProduct(String name, double price, String category, boolean special, double addedPrice) {
@@ -27,6 +23,6 @@ public class SpecialProduct extends Product{
     public String toString() {
         return super.toString() + " [special=" + special + ", addedPrice=" + addedPrice + "]";
     }
-	
+	//
 
 }
