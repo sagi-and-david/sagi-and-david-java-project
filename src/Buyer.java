@@ -87,11 +87,7 @@ public class Buyer extends Human{
 			if (this.previousCarts[i] == null) {
 				break;
 			}
-<<<<<<< HEAD
 			printText += i + ". " + this.previousCarts[i].toString() + "\n";
-=======
-			 System.out.println(i + ". " + this.previousCarts[i].toString());
->>>>>>> 92f61b5cc24c4613bb30c7c1b4133f499797098f
 		}
 		return printText;
 	}
