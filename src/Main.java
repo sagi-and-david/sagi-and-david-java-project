@@ -170,7 +170,11 @@ public class Main {
 						//if no sellers available quit and leave a message
 						
 						System.out.println("choose seller (an existing one, Type quit to cancel): ");
+<<<<<<< HEAD
 						System.out.println(management.displayHumans(false));
+=======
+						management.displayHumans(false);
+>>>>>>> 92f61b5cc24c4613bb30c7c1b4133f499797098f
 						//seller name
 						sellerName = reader.next();
 						if (sellerName.equals("quit".toLowerCase())) {
@@ -261,7 +265,11 @@ public class Main {
 				while(buyerIndex == -1) {
 					//loop choose existing buyer
 					System.out.println("choose buyer (Type quit to cancel): ");
+<<<<<<< HEAD
 					System.out.println(management.displayHumans(true));
+=======
+					management.displayHumans(true);
+>>>>>>> 92f61b5cc24c4613bb30c7c1b4133f499797098f
 					//buyer name
 					buyerName = reader.next();
 					if (buyerName.equals("quit".toLowerCase())) {
@@ -275,7 +283,11 @@ public class Main {
 				while(sellerIndex == -1 && leaveMode == false) {
 					//loop choose existing seller
 					System.out.println("choose seller: ");
+<<<<<<< HEAD
 					System.out.println(management.displayHumans(false));
+=======
+					management.displayHumans(false);
+>>>>>>> 92f61b5cc24c4613bb30c7c1b4133f499797098f
 					//seller name
 					sellerName = reader.next();
 					sellerIndex = management.findSellerOrBuyerIndexByName(sellerName, false);
@@ -315,7 +327,11 @@ public class Main {
 				break;
 			case 5:	
 				while(!leaveMode) {
+<<<<<<< HEAD
 					System.out.println(management.displayHumans(true));
+=======
+					management.displayHumans(true);
+>>>>>>> 92f61b5cc24c4613bb30c7c1b4133f499797098f
 					System.out.print("Enter buyer's name (Type quit to cancel): ");
 					buyerName = reader.next();
 					if (buyerName.equals("quit".toLowerCase())) {
@@ -329,6 +345,7 @@ public class Main {
 					else {
 						break;
 					}	
+<<<<<<< HEAD
 				}
 				
 				if(leaveMode) {
@@ -336,6 +353,11 @@ public class Main {
 					break;
 				}
 				
+=======
+				}
+				
+				
+>>>>>>> 92f61b5cc24c4613bb30c7c1b4133f499797098f
 				// show the cart, the total price.				
 				Buyer buyer = (Buyer)management.getHumans()[buyerIndex];
 				try {
@@ -343,7 +365,11 @@ public class Main {
 		                throw new Exception("The cart is empty!");
 		            } else {
 		                System.out.println("Here is your cart: ");
+<<<<<<< HEAD
 		                System.out.println(buyer.displayProducts());
+=======
+		                buyer.displayProducts();
+>>>>>>> 92f61b5cc24c4613bb30c7c1b4133f499797098f
 		                System.out.println("Total price of: " + buyer.cartPrice());
 		                buyer.moveToPreviousCarts();
 		            }
@@ -418,6 +444,64 @@ public class Main {
 				}
 				
 				System.out.println(temporaryBuyer.displayPreviousCarts());
+				int cartNumber;
+				do {
+		            try {
+		                System.out.print("Enter wanted cart: ");
+		    			cartNumber = reader.nextInt();
+		    			if (cartNumber >= temporaryBuyer.getPreviousCarts().length || cartNumber < 0) {
+		    				throw new Exception("There is no cart indexed " + cartNumber);
+		    			}
+		                break;  // Exit the loop if input is successfully read
+		            } catch (Exception e) {
+		                System.out.println("Error: " + e.getMessage());
+		                reader.next();  // Clear the invalid input from scanner
+		            }
+		        } while (true); 
+				
+				// setting the prev cart to the new cart
+				temporaryBuyer.setProducts(temporaryBuyer.getPreviousCarts()[cartNumber].getProducts());
+				System.out.println("[SUCCESS] Your cart has been updated !");
+				
+				
+				break;
+				
+			case 9:
+				while(!leaveMode) {
+					management.displayHumans(true);
+					System.out.print("Enter buyer's name (Type quit to cancel): ");
+					buyerName = reader.next();
+					if (buyerName.equals("quit".toLowerCase())) {
+						leaveMode = true;
+						break;
+					}
+					buyerIndex = management.findSellerOrBuyerIndexByName(buyerName, true);
+					if(buyerIndex == -1) {
+						System.out.println("Buyer doesnt exists!, try again.");
+					}
+					else {
+						break;
+					}	
+				}
+				// show the cart, the total price.				
+				Buyer temporaryBuyer = (Buyer)management.getHumans()[buyerIndex];
+				
+				if (temporaryBuyer.getProducts().length > 0) {
+					System.out.println("Your currect cart is not empty, are you sure you want to proceed? (yes/no): ");
+			        String result = reader.next();
+					while(!result.toLowerCase().equals("yes") && !result.toLowerCase().equals("no")) {
+						//enter if answer isn't yes or no is wrong exit if category is right
+						System.out.println("wrong answer choose again");
+						System.out.println("Does the product have a special wrap? (yes/no): ");
+						result = reader.next();
+					}
+					if (result.equals("no")) {
+						System.out.println("Your cart remained the same.");
+						break;
+					}
+				}
+				
+				temporaryBuyer.displayPreviousCarts();
 				int cartNumber;
 				do {
 		            try {
