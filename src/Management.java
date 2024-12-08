@@ -38,7 +38,10 @@ public class Management{
 		}
 	}
 
-	public void displayHumans(boolean isBuyer) {
+	public String displayHumans(boolean isBuyer) {
+		
+		String printText = "";
+		
 		for (int i = 0; i < this.humans.length; i++) {
 			//using the get methods in the Buyer class
 			if (this.humans[i] == null) {
@@ -47,22 +50,26 @@ public class Management{
 			
 			if (isBuyer) {
 				if (humans[i] instanceof Buyer) {
-					System.out.println(((Buyer)humans[i]).toString());
+					printText += ((Buyer)humans[i]).toString() + "\n";
 				}
 			}else {
 				if (humans[i] instanceof Seller) {
-					System.out.println(((Seller)humans[i]).toString());
+					printText += ((Seller)humans[i]).toString() + "\n";
 				}
 			}
 		} 
+		return printText;
 	}
 	
-	public void displayBuyersWithCart() {
+	public String displayBuyersWithCart() {
 	    // Create an array of Buyers
 	    Buyer[] buyers = new Buyer[buyersCount];
 
 	    // Populate the array with Buyers
 	    int index = 0;
+	    
+	    String printText = "";
+	    
 	    for (Human human : humans) {
 	        if (human instanceof Buyer) {
 	            buyers[index++] = (Buyer) human;
@@ -74,24 +81,28 @@ public class Management{
 
 	    // Print buyers with their carts
 	    for (Buyer buyer : buyers) {
-	        System.out.println("Buyer name: " + buyer.getName() + " Buyer password: " + buyer.getPassword() + " Buyer address: " + buyer.getAddress());
+	        printText += "Buyer name: " + buyer.getName() + " Buyer password: " + buyer.getPassword() + " Buyer address: " + buyer.getAddress() + "\n";
 	        if (buyer.getProducts() != null) {
-	            System.out.println("current cart: ");
-	            buyer.displayProducts();
+	            printText += "current cart: \n";
+	            printText += buyer.displayProducts() + "\n";
 	        }
 	        if (buyer.getPreviousCarts() != null) {
-	            System.out.println("previous carts: ");
-	            buyer.displayPreviousCarts();
+	            printText += "previous carts: \n";
+	            printText += buyer.displayPreviousCarts() + "\n";
 	        }	        
 	    }
+	    return printText;
 	}
 
-	public void displaySellersWithProducts() {
+	public String displaySellersWithProducts() {
 	    // Create an array of Sellers
 	    Seller[] sellers = new Seller[sellersCount];
 
 	    // Populate the array with Sellers
 	    int index = 0;
+	    
+	    String printText = "";
+	    
 	    for (Human human : humans) {
 	        if (human instanceof Seller) {
 	            sellers[index++] = (Seller) human;
@@ -103,12 +114,14 @@ public class Management{
 
 	    // Print sellers with their products
 	    for (Seller seller : sellers) {
-	        System.out.println("Seller name: " + seller.getName() + " Seller password: " + seller.getPassword());
-	        seller.displayProducts();
+	    	printText += "Seller name: " + seller.getName() + " Seller password: " + seller.getPassword() + "\n";
+	        printText += seller.displayProducts() + "\n";
 	    }
+	    return printText;
 	}
 
-	public void displayAllItemsFromACategory(String category) {
+	public String displayAllItemsFromACategory(String category) {
+		String printText = "";
 		for (int i = 0; i < this.humans.length; i++) {
 			//using the get methods in the Seller class
 			if (this.humans[i] == null) {
@@ -133,11 +146,12 @@ public class Management{
 					}
 					if(tempSeller.getProducts()[j].getCategory().equals(category)) {
 						//if product category fits category then print
-						System.out.println(tempSeller.getProducts()[j].toString());
+						printText += tempSeller.getProducts()[j].toString() + "\n";
 					}
 				}
 			}
 		}
+		return printText;
 	}
 
 	public int getSellersCount() {

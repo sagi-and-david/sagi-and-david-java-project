@@ -1,5 +1,3 @@
-import java.util.Random;
-
 public class Product {
     private String name;
     private double price;
@@ -42,8 +40,9 @@ public class Product {
     }
 
     private int createSerialNumber() {
-        Random rand = new Random();
-        return rand.nextInt(10000000, 100000000);
+    	int max = 1000000000;
+    	int min = 100000000;
+        return (int) (Math.random() * (max - min) + min);
     }
 
     @Override

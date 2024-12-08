@@ -173,8 +173,13 @@ public class Main {
 						//add item to seller
 						//if no sellers available quit and leave a message
 						
+<<<<<<< HEAD
 						System.out.println("	choose seller (an existing one, Type quit to cancel): ");
 						management.displayHumans(false);
+=======
+						System.out.println("choose seller (an existing one, Type quit to cancel): ");
+						System.out.println(management.displayHumans(false));
+>>>>>>> fe675c540e1e9dd1b26b3a914a5188d87d932ae4
 						//seller name
 						sellerName = reader.next();
 						if (sellerName.equals("quit".toLowerCase())) {
@@ -265,8 +270,13 @@ public class Main {
 				System.out.println("[Adding product to buyer] fill the details below");
 				while(buyerIndex == -1) {
 					//loop choose existing buyer
+<<<<<<< HEAD
 					System.out.println("	choose buyer (Type quit to cancel): ");
 					management.displayHumans(true);
+=======
+					System.out.println("choose buyer (Type quit to cancel): ");
+					System.out.println(management.displayHumans(true));
+>>>>>>> fe675c540e1e9dd1b26b3a914a5188d87d932ae4
 					//buyer name
 					buyerName = reader.next();
 					if (buyerName.equals("quit".toLowerCase())) {
@@ -279,8 +289,13 @@ public class Main {
 				sellerIndex = -1;
 				while(sellerIndex == -1 && leaveMode == false) {
 					//loop choose existing seller
+<<<<<<< HEAD
 					System.out.println("	Choose seller: ");
 					management.displayHumans(false);
+=======
+					System.out.println("choose seller: ");
+					System.out.println(management.displayHumans(false));
+>>>>>>> fe675c540e1e9dd1b26b3a914a5188d87d932ae4
 					//seller name
 					sellerName = reader.next();
 					sellerIndex = management.findSellerOrBuyerIndexByName(sellerName, false);
@@ -296,7 +311,7 @@ public class Main {
 				//get seller
 				Seller chosenSeller = (Seller)management.getHumans()[sellerIndex];
 				//System.out.println(chosenSeller.getName()); // remove 
-				chosenSeller.displayProducts();
+				System.out.println(chosenSeller.displayProducts());
 				if (chosenSeller.getProducts()[0] != null) {
 					
 					Seller tempSeller;
@@ -321,7 +336,7 @@ public class Main {
 
 			case 5:	
 				while(!leaveMode) {
-					management.displayHumans(true);
+					System.out.println(management.displayHumans(true));
 					System.out.print("Enter buyer's name (Type quit to cancel): ");
 					buyerName = reader.next();
 					if (buyerName.equals("quit".toLowerCase())) {
@@ -337,6 +352,10 @@ public class Main {
 					}	
 				}
 				
+				if(leaveMode) {
+					//quit
+					break;
+				}
 				
 				// show the cart, the total price.				
 				Buyer buyer = (Buyer)management.getHumans()[buyerIndex];
@@ -345,7 +364,7 @@ public class Main {
 		                throw new Exception("The cart is empty!");
 		            } else {
 		                System.out.println("Here is your cart: ");
-		                buyer.displayProducts();
+		                System.out.println(buyer.displayProducts());
 		                System.out.println("Total price of: " + buyer.cartPrice());
 		                buyer.moveToPreviousCarts();
 		            }
@@ -355,11 +374,11 @@ public class Main {
 				break;
 			case 6:
 				//case 6 show all buyers
-				management.displayBuyersWithCart();
+				System.out.print(management.displayBuyersWithCart());
 				break;
 			case 7:
 				//case 7 show all sellers
-				management.displaySellersWithProducts();
+				System.out.println(management.displaySellersWithProducts());
 				break;
 			
 			case 8:
@@ -378,12 +397,12 @@ public class Main {
 				if(leaveMode) {
 					break;
 				}
-				management.displayAllItemsFromACategory(category);
+				System.out.println(management.displayAllItemsFromACategory(category));
 				break;
 				
 			case 9:
 				while(!leaveMode) {
-					management.displayHumans(true);
+					System.out.println(management.displayHumans(true));
 					System.out.print("Enter buyer's name (Type quit to cancel): ");
 					buyerName = reader.next();
 					if (buyerName.equals("quit".toLowerCase())) {
@@ -397,6 +416,9 @@ public class Main {
 					else {
 						break;
 					}	
+				}
+				if(leaveMode) {
+					break;
 				}
 				// show the cart, the total price.				
 				Buyer temporaryBuyer = (Buyer)management.getHumans()[buyerIndex];
@@ -416,7 +438,7 @@ public class Main {
 					}
 				}
 				
-				temporaryBuyer.displayPreviousCarts();
+				System.out.println(temporaryBuyer.displayPreviousCarts());
 				int cartNumber;
 				do {
 		            try {

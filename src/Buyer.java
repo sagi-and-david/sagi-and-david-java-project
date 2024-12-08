@@ -69,23 +69,27 @@ public class Buyer extends Human{
 	}
 	
 	//display each product using the display method in "Product class"
-	public void displayProducts() {
+	public String displayProducts() {
+		String printText = "";
 		for(int i = 0; i < this.products.length; i++) {
 			if (this.products[i] == null) {
 				break;
 			}
-			 System.out.println(this.products[i].toString());
+			 printText += this.products[i].toString() + "\n";
 		}
+		return printText;
 	}
 	
 	//display each previous product using the display method in "Product class"
-	public void displayPreviousCarts() {
+	public String displayPreviousCarts() {
+		String printText = "";
 		for(int i = 0; i < this.previousCarts.length; i++) {
 			if (this.previousCarts[i] == null) {
 				break;
 			}
-			 System.out.println(i + ". " + this.previousCarts[i].toString());
+			printText += i + ". " + this.previousCarts[i].toString() + "\n";
 		}
+		return printText;
 	}
 	
 

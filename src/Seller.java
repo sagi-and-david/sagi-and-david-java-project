@@ -36,14 +36,15 @@ public class Seller extends Human {
 		this.productsCount++;
 	}
 	
-	public void displayProducts() {
+	public String displayProducts() {
+		String printText = "";
 		for(int i = 0; i < this.products.length; i++) {
 			if (this.products[i] == null) {
 				break;
 			}
-		 
-		 System.out.println(products[i].toString());
+		 printText += products[i].toString() + "\n";
 		}
+		return printText;
 	}
 	
 	public Product getExistingProduct(String productName) {
