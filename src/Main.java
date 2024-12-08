@@ -26,17 +26,21 @@ public class Main {
 	
 	public static void menu() {
 		//menu
-		System.out.println("enter command\n");
-		System.out.println("0 - Exit\n");
-		System.out.println("1 - add seller\n");
-		System.out.println("2 - add buyer\n");
-		System.out.println("3 - add item to seller\n");
-		System.out.println("4 - add item to buyer\n");
-		System.out.println("5 - customer pay\n");
-		System.out.println("6 - all buyers items list\n");
-		System.out.println("7 - all sellers items list\n");
-		System.out.println("8 - show all items from a category: ");
-		System.out.println("9 - change cart for buyer: ");
+		System.out.println("------------------------");
+		System.out.println("|     Enter Command    |");
+		System.out.println("------------------------");
+
+		System.out.println("	0 - Exit");
+		System.out.println("	1 - add seller");
+		System.out.println("	2 - add buyer");
+		System.out.println("	3 - add item to seller");
+		System.out.println("	4 - add item to buyer");
+		System.out.println("	5 - customer pay");
+		System.out.println("	6 - all buyers items list");
+		System.out.println("	7 - all sellers items list");
+		System.out.println("	8 - show all items from a category: ");
+		System.out.println("	9 - change cart for buyer: ");
+		System.out.println("	10- Buyers/sellers auto creation");
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -86,9 +90,9 @@ public class Main {
 			case 1:
 				//case 1 add seller
 				//loop for taken name
-				
+				System.out.println("[Adding Seller] fill the details below");
 				while(!leaveMode) {
-					System.out.print("Enter seller name (Type quit to cancel): ");
+					System.out.print("	Enter seller name (Type quit to cancel): ");
 					sellerName = reader.next();
 					if (sellerName.equals("quit".toLowerCase())) {
 						leaveMode = true;
@@ -96,7 +100,7 @@ public class Main {
 					}
 					sellerIndex = management.findSellerOrBuyerIndexByName(sellerName, false);
 					if(sellerIndex != -1) {
-						System.out.println("Seller already exists");
+						System.out.println("	Seller already exists");
 					}
 					else {
 						break;
@@ -105,13 +109,13 @@ public class Main {
 				
 				//asking for the seller`s password
 				while (sellerPassword.trim() == "" && !leaveMode) {
-					System.out.print("Enter seller password (Type quit to cancel): ");
+					System.out.print("	Enter seller password (Type quit to cancel): ");
 					sellerPassword = reader.next();
 				}
 				// adding the seller to the array that in the management class
 				if (!leaveMode) {
 					management.addHuman(sellerName, sellerPassword, null);
-					System.out.println("[ Added seller! ]");	
+					System.out.println("	[ Added seller ]");
 					//reset password for next seller
 					sellerPassword = "";
 				}
@@ -122,8 +126,9 @@ public class Main {
 				buyerPassword = "";
 				//case 2 add buyer
 				//loop for taken name
+				System.out.println("[Adding Buyer] enter the details below");
 				while(!leaveMode) {
-					System.out.print("Enter buyer's name (Type quit to cancel): ");
+					System.out.print("	Enter buyer's name (Type quit to cancel): ");
 					buyerName = reader.next();
 					if (buyerName.equals("quit".toLowerCase())) {
 						leaveMode = true;
@@ -131,7 +136,7 @@ public class Main {
 					}
 					buyerIndex = management.findSellerOrBuyerIndexByName(buyerName, true);
 					if(buyerIndex != -1) {
-						System.out.println("Buyer already exists");
+						System.out.println("	Buyer already exists");
 					}
 					else {
 						break;
@@ -139,27 +144,26 @@ public class Main {
 				}
 				//asking for the buyer`s password
 				while (buyerPassword.trim() == "" && leaveMode == false) {
-					System.out.print("Enter buyer password (No spaces allowed): ");
+					System.out.print("	Enter buyer password (No spaces allowed): ");
 					buyerPassword = reader.next();
 				}
 				//asking for the buyer`s address
 				while (buyerAddress.trim() == "" && leaveMode == false) {
-					System.out.print("Enter buyer address (No spaces allowed): ");
+					System.out.print("	Enter buyer address (No spaces allowed): ");
 					buyerAddress = reader.next();
 				}
 				// adding the buyer to the array that in the management class
 				if (!leaveMode) {
 					management.addHuman(buyerName, buyerPassword, buyerAddress);
-					System.out.println("Buyer added to management class !");					
+					System.out.println("	[Buyer added]");
 				}
-
 				break;
 				
 			case 3:
-
 				//add product to seller
+				System.out.println("[Adding product to seller] fill the details below");
 				if (management.getSellersCount() == 0) {
-					System.out.println("There are 0 available sellers.");
+					System.out.println("	There are 0 available sellers.");
 					break;
 				}else {
 					//add item to seller
@@ -169,7 +173,7 @@ public class Main {
 						//add item to seller
 						//if no sellers available quit and leave a message
 						
-						System.out.println("choose seller (an existing one, Type quit to cancel): ");
+						System.out.println("	choose seller (an existing one, Type quit to cancel): ");
 						management.displayHumans(false);
 						//seller name
 						sellerName = reader.next();
@@ -182,14 +186,14 @@ public class Main {
 					if (leaveMode) {
 						break;
 					}
-					System.out.println("Enter item name you want to add: ");
+					System.out.println("	Enter item name you want to add: ");
 					//item name
 					String item = reader.next();
 					Seller tempSeller = (Seller)management.getHumans()[sellerIndex]; // cast to seller so we can use the 'getExistingProducts' method
 					while(tempSeller.getExistingProduct(item) != null) {
 						//product already exists
-						System.out.println("item already exists");
-						System.out.println("enter item name you want to add: ");
+						System.out.println("	Item already exists");
+						System.out.println("	Enter item name you want to add: ");
 						//item name
 						item = reader.next();
 					}	
@@ -198,11 +202,11 @@ public class Main {
 					double itemPrice;
 					do {
 			            try {
-			                System.out.print("Enter the price: ");
+			                System.out.print("	Enter the price: ");
 			                itemPrice = reader.nextDouble();
 			                break;  // Exit the loop if input is successfully read
 			            } catch (InputMismatchException e) {
-			                System.out.println("Error: Price must be a number, try again");
+			                System.out.println("	Error: Price must be a number, try again");
 			                reader.next();  // Clear the invalid input from scanner
 			            }
 			        } while (true); 
@@ -211,35 +215,35 @@ public class Main {
 					//item category
 			        String category;
 			        while (true) {
-			            System.out.println("Enter item category (kids, electricity, office, clothes): ");
+			            System.out.println("	Enter item category (kids, electricity, office, clothes): ");
 			            category = reader.next();
 			            if (Categories.contains(category.toLowerCase())) {
 			                break;
 			            } else {
-			                System.out.println("Invalid category. Please choose again.");
+			                System.out.println("	Invalid category. Please choose again.");
 			            }
 			        }
 					
-					System.out.println("Does the product have a special wrap? (yes/no): ");
+					System.out.println("	Does the product have a special wrap? (yes/no): ");
 			        String specialWrap = reader.next();
 					while(!specialWrap.toLowerCase().equals("yes") && !specialWrap.toLowerCase().equals("no")) {
 						//enter if answer isn't yes or no is wrong exit if category is right
-						System.out.println("wrong answer choose again");
-						System.out.println("Does the product have a special wrap? (yes/no): ");
+						System.out.println("	Wrong answer choose again");
+						System.out.println("	Does the product have a special wrap? (yes/no): ");
 						specialWrap = reader.next();
 					}
 			        Product product;
 			        //check for wrap if yes get added cost else normal product
 			        if (specialWrap.toLowerCase().equals("yes")) {
-			            System.out.println("Enter the additional cost for the special wrap: ");
+			            System.out.println("	Enter the additional cost for the special wrap: ");
 			            double addedCost;
 			            do {
 				            try {
-				                System.out.print("Enter the price: ");
+				                System.out.print("	Enter the price: ");
 				                addedCost = reader.nextDouble();
 				                break;  // Exit the loop if input is successfully read
 				            } catch (InputMismatchException e) {
-				                System.out.println("Error: Price must be a number, try again");
+				                System.out.println("	Error: Price must be a number, try again");
 				                reader.next();  // Clear the invalid input from scanner
 				            }
 				        } while (true); 
@@ -251,16 +255,17 @@ public class Main {
 					// add product to seller
 			        tempSeller = (Seller)management.getHumans()[sellerIndex]; // same casting as before
 					tempSeller.addProduct(product);
-					System.out.println("Product added!");
+					System.out.println("	[Product added]");
 					break;
 				}
 				
 			case 4:
 				//case 4 add item to buyer
 				buyerIndex = -1;
+				System.out.println("[Adding product to buyer] fill the details below");
 				while(buyerIndex == -1) {
 					//loop choose existing buyer
-					System.out.println("choose buyer (Type quit to cancel): ");
+					System.out.println("	choose buyer (Type quit to cancel): ");
 					management.displayHumans(true);
 					//buyer name
 					buyerName = reader.next();
@@ -274,7 +279,7 @@ public class Main {
 				sellerIndex = -1;
 				while(sellerIndex == -1 && leaveMode == false) {
 					//loop choose existing seller
-					System.out.println("choose seller: ");
+					System.out.println("	Choose seller: ");
 					management.displayHumans(false);
 					//seller name
 					sellerName = reader.next();
@@ -283,7 +288,7 @@ public class Main {
 				if (leaveMode) {
 					break;
 				}
-				System.out.println("Here are the products you can find in " + sellerName + "`s store");
+				System.out.println("	Here are the products you can find in " + sellerName + "`s store");
 				String productName = "";
 				Product chosenProduct = null;
 				//buyer is choosing a product
@@ -297,7 +302,7 @@ public class Main {
 					Seller tempSeller;
 					while(true) {
 						//loop choose existing product
-						System.out.println("choose product: ");
+						System.out.println("	Choose product: ");
 						productName = reader.next();
 						tempSeller = (Seller)management.getHumans()[sellerIndex];
 						chosenProduct = tempSeller.getExistingProduct(productName);
@@ -307,12 +312,13 @@ public class Main {
 					}
 					Buyer tempBuyer = (Buyer)management.getHumans()[buyerIndex];
 					tempBuyer.addProduct(chosenProduct.getName(), chosenProduct.getPrice(), chosenProduct.getCategory());
-					System.out.println("Product Added. ");
+					System.out.println("	[Product Added] ");
 				}
 				else {
-					System.out.println("There are no products in the store");
+					System.out.println("	There are no products in the store");
 				}
 				break;
+
 			case 5:	
 				while(!leaveMode) {
 					management.displayHumans(true);
@@ -432,7 +438,26 @@ public class Main {
 				
 				
 				break;
+
+				case 10:
+					int botsAmount = 5;
+					// adding sellers.
+					int basePrice = 50;
+					for(int i = 0; i < botsAmount; i++){
+						management.addHuman("Sellerbot" + i, "password" + i, null);
+						Seller tmpSeller = (Seller)management.getHumans()[i];
+						tmpSeller.addProduct(new Product("productExample" + i, i + basePrice, "category" + i));
+					}
+					//adding buyers.
+					for(int i = 0; i < botsAmount; i++){
+						management.addHuman("Buyerbot" + i, "password" + i, "address" + i);
+						Buyer tmpBuyer = (Buyer)management.getHumans()[botsAmount + i];
+						tmpBuyer.addProduct("productExample"+i, i + basePrice, "category" + i);
+					}
+					System.out.println("[Added bots] - 5 sellers - 5 buyers - each with one product.");
+					break;
 			}
+
 		}
 	}
 }
