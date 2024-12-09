@@ -6,6 +6,7 @@ public class Buyer extends Human{
 	private Product[] products;
 	private Cart[] previousCarts;
 	private int productsCount;
+	private int numOfPrevCarts;
 	
 	private int previousCartsCount;
 	
@@ -17,6 +18,8 @@ public class Buyer extends Human{
 		this.productsCount = 0;
 		this.previousCarts = new Cart[10];//initiating empty array in length 10 will expand if needed
 		this.previousCartsCount = 0;
+		this.numOfPrevCarts=0;
+		
 	}
 	public int getProductsCount() {
 		return productsCount;
@@ -104,6 +107,12 @@ public class Buyer extends Human{
 		}
 		return sum;
 	}
+	
+    // Clear the cart
+    public void clearCart() {
+        this.products = new Product[10];  // Resetting the cart to a new empty array
+        this.productsCount = 0;  // Resetting the products count to 0
+    }
 	
 	public void moveToPreviousCarts() {
 		//expand if needed previous products to the size of products
