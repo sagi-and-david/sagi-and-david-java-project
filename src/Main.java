@@ -2,20 +2,16 @@
 //David Bekker 328088521
 //teacher: Eyal Eisenstein
 import javax.print.attribute.standard.JobKOctets;
+import java.security.KeyStore;
 import java.util.IllegalFormatCodePointException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
-	
-
 	//variables
 	private static boolean exitFlag = true;
-		
-		
 	//create reader
 	private static Scanner reader = new Scanner(System.in);
-		
 	// function to handle exit
 	public static void exit() {
 		//case 0 exit
@@ -43,6 +39,178 @@ public class Main {
 		System.out.println("	8 - show all items from a category: ");
 		System.out.println("	9 - change cart for buyer: ");
 		System.out.println("	10- Buyers/sellers auto creation");
+	}
+
+	public static void addSeller(Management management){
+		System.out.println("[Adding Seller] fill the details below");
+		boolean running = true;
+		String sellerName = "";
+		String sellerPassword = "";
+		int sellerIndex;
+		while(running) {
+			System.out.print("	Enter seller name (Type quit to cancel): ");
+			sellerName = reader.next();
+			if (sellerName.equals("quit".toLowerCase())) {
+				running = false;
+				return;
+			}
+			sellerIndex = management.findSellerOrBuyerIndexByName(sellerName, false);
+			if(sellerIndex != -1) {
+				System.out.println("	Seller already exists");
+			}
+			else {
+				break;
+			}
+		}
+		//asking for the seller`s password
+		while (sellerPassword.trim().isEmpty()) {
+			System.out.print("	Enter seller password (Type quit to cancel): ");
+			sellerPassword = reader.next();
+		}
+		// adding the seller to the array that in the management class
+		management.addHuman(sellerName, sellerPassword, null);
+		System.out.println("	[ Added seller ]");
+		//reset password for next seller
+	}
+	public static void addBuyer(Management management){
+		//case 2 add buyer
+		boolean running = true;
+		String buyerAddress = "";
+		String buyerPassword = "";
+		String buyerName = "";
+		int buyerIndex;
+		System.out.println("[Adding Buyer] enter the details below");
+		//loop for taken name
+		while(running) {
+			System.out.print("	Enter buyer's name (Type quit to cancel): ");
+			buyerName = reader.next();
+			if (buyerName.equals("quit".toLowerCase())) {
+				running = false;
+				return;
+			}
+			buyerIndex = management.findSellerOrBuyerIndexByName(buyerName, true);
+			if(buyerIndex != -1) {
+				System.out.println("	Buyer already exists");
+			}
+			else {
+				break;
+			}
+		}
+		//asking for the buyer`s password
+		while (buyerPassword.trim().isEmpty()) {
+			System.out.print("	Enter buyer password (No spaces allowed): ");
+			buyerPassword = reader.next();
+		}
+		//asking for the buyer`s address
+		while (buyerAddress.trim().isEmpty()) {
+			System.out.print("	Enter buyer address (No spaces allowed): ");
+			buyerAddress = reader.next();
+		}
+		// adding the buyer to the array that in the management class
+		management.addHuman(buyerName, buyerPassword, buyerAddress);
+		System.out.println("	[Buyer added]");
+	}
+
+	public static void addProductToSeller(Management management){
+		//add product to seller
+		int sellerIndex;
+		String sellerName = "";
+		boolean running = true;
+		System.out.println("[Adding product to seller] fill the details below");
+		if (management.getSellersCount() == 0) {
+			System.out.println("	There are 0 available sellers.");
+			return;
+		}else {
+			//add item to seller
+			sellerIndex = -1;
+			while(sellerIndex == -1 && running) {
+				//loop choose existing seller
+				//add item to seller
+				//if no sellers available quit and leave a message
+
+				System.out.println("	choose seller (an existing one, Type quit to cancel): ");
+				management.displayHumans(false);
+				System.out.println("choose seller (an existing one, Type quit to cancel): ");
+				System.out.println(management.displayHumans(false));
+				//seller name
+				sellerName = reader.next();
+				if (sellerName.equals("quit".toLowerCase())) {
+					return;
+				}
+				sellerIndex = management.findSellerOrBuyerIndexByName(sellerName, false);
+			}
+
+			System.out.println("	Enter item name you want to add: ");
+			//item name
+			String item = reader.next();
+			Seller tempSeller = (Seller)management.getHumans()[sellerIndex]; // cast to seller so we can use the 'getExistingProducts' method
+			while(tempSeller.getExistingProduct(item) != null) {
+				//product already exists
+				System.out.println("	Item already exists");
+				System.out.println("	Enter item name you want to add: ");
+				//item name
+				item = reader.next();
+			}
+
+			//item price
+			double itemPrice;
+			do {
+				try {
+					System.out.print("	Enter the price: ");
+					itemPrice = reader.nextDouble();
+					break;  // Exit the loop if input is successfully read
+				} catch (InputMismatchException e) {
+					System.out.println("	Error: Price must be a number, try again");
+					reader.next();  // Clear the invalid input from scanner
+				}
+			} while (true);
+
+
+			//item category
+			String category;
+			while (true) {
+				System.out.println("	Enter item category (kids, electricity, office, clothes): ");
+				category = reader.next();
+				if (Categories.contains(category.toLowerCase())) {
+					break;
+				} else {
+					System.out.println("	Invalid category. Please choose again.");
+				}
+			}
+
+			System.out.println("	Does the product have a special wrap? (yes/no): ");
+			String specialWrap = reader.next();
+			while(!specialWrap.toLowerCase().equals("yes") && !specialWrap.toLowerCase().equals("no")) {
+				//enter if answer isn't yes or no is wrong exit if category is right
+				System.out.println("	Wrong answer choose again");
+				System.out.println("	Does the product have a special wrap? (yes/no): ");
+				specialWrap = reader.next();
+			}
+			Product product;
+			//check for wrap if yes get added cost else normal product
+			if (specialWrap.toLowerCase().equals("yes")) {
+				System.out.println("	Enter the additional cost for the special wrap: ");
+				double addedCost;
+				do {
+					try {
+						System.out.print("	Enter the price: ");
+						addedCost = reader.nextDouble();
+						break;  // Exit the loop if input is successfully read
+					} catch (InputMismatchException e) {
+						System.out.println("	Error: Price must be a number, try again");
+						reader.next();  // Clear the invalid input from scanner
+					}
+				} while (true);
+				product = new SpecialProduct(item, itemPrice, category, true, addedCost);
+			}
+			else {
+				product = new Product(item, itemPrice, category);
+			}
+			// add product to seller
+			tempSeller = (Seller)management.getHumans()[sellerIndex]; // same casting as before
+			tempSeller.addProduct(product);
+			System.out.println("	[Product added]");
+		}
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -81,182 +249,20 @@ public class Main {
 			//switch case between the different commands
 			switch(command) {
 			case 0:
-				//case 0 exit
 				exit();
 				break;
+
 			case 1:
-				//case 1 add seller
-				//loop for taken name
-				System.out.println("[Adding Seller] fill the details below");
-				while(!leaveMode) {
-					System.out.print("	Enter seller name (Type quit to cancel): ");
-					sellerName = reader.next();
-					if (sellerName.equals("quit".toLowerCase())) {
-						leaveMode = true;
-						break;
-					}
-					sellerIndex = management.findSellerOrBuyerIndexByName(sellerName, false);
-					if(sellerIndex != -1) {
-						System.out.println("	Seller already exists");
-					}
-					else {
-						break;
-					}	
-				}
-				
-				//asking for the seller`s password
-				while (sellerPassword.trim() == "" && !leaveMode) {
-					System.out.print("	Enter seller password (Type quit to cancel): ");
-					sellerPassword = reader.next();
-				}
-				// adding the seller to the array that in the management class
-				if (!leaveMode) {
-					management.addHuman(sellerName, sellerPassword, null);
-					System.out.println("	[ Added seller ]");
-					//reset password for next seller
-					sellerPassword = "";
-				}
+				addSeller(management);
 				break;
 				
 			case 2:
-				buyerAddress = "";
-				buyerPassword = "";
-				//case 2 add buyer
-				//loop for taken name
-				System.out.println("[Adding Buyer] enter the details below");
-				while(!leaveMode) {
-					System.out.print("	Enter buyer's name (Type quit to cancel): ");
-					buyerName = reader.next();
-					if (buyerName.equals("quit".toLowerCase())) {
-						leaveMode = true;
-						break;
-					}
-					buyerIndex = management.findSellerOrBuyerIndexByName(buyerName, true);
-					if(buyerIndex != -1) {
-						System.out.println("	Buyer already exists");
-					}
-					else {
-						break;
-					}	
-				}
-				//asking for the buyer`s password
-				while (buyerPassword.trim() == "" && leaveMode == false) {
-					System.out.print("	Enter buyer password (No spaces allowed): ");
-					buyerPassword = reader.next();
-				}
-				//asking for the buyer`s address
-				while (buyerAddress.trim() == "" && leaveMode == false) {
-					System.out.print("	Enter buyer address (No spaces allowed): ");
-					buyerAddress = reader.next();
-				}
-				// adding the buyer to the array that in the management class
-				if (!leaveMode) {
-					management.addHuman(buyerName, buyerPassword, buyerAddress);
-					System.out.println("	[Buyer added]");
-				}
+				addBuyer(management);
 				break;
 				
 			case 3:
-				//add product to seller
-				System.out.println("[Adding product to seller] fill the details below");
-				if (management.getSellersCount() == 0) {
-					System.out.println("	There are 0 available sellers.");
-					break;
-				}else {
-					//add item to seller
-					sellerIndex = -1;
-					while(sellerIndex == -1 && leaveMode == false) {
-						//loop choose existing seller
-						//add item to seller
-						//if no sellers available quit and leave a message
-						
-						System.out.println("	choose seller (an existing one, Type quit to cancel): ");
-						management.displayHumans(false);
-						System.out.println("choose seller (an existing one, Type quit to cancel): ");
-						System.out.println(management.displayHumans(false));
-						//seller name
-						sellerName = reader.next();
-						if (sellerName.equals("quit".toLowerCase())) {
-							leaveMode = true;
-							break;
-						}
-						sellerIndex = management.findSellerOrBuyerIndexByName(sellerName, false);
-					}
-					if (leaveMode) {
-						break;
-					}
-					System.out.println("	Enter item name you want to add: ");
-					//item name
-					String item = reader.next();
-					Seller tempSeller = (Seller)management.getHumans()[sellerIndex]; // cast to seller so we can use the 'getExistingProducts' method
-					while(tempSeller.getExistingProduct(item) != null) {
-						//product already exists
-						System.out.println("	Item already exists");
-						System.out.println("	Enter item name you want to add: ");
-						//item name
-						item = reader.next();
-					}	
-					
-					//item price
-					double itemPrice;
-					do {
-			            try {
-			                System.out.print("	Enter the price: ");
-			                itemPrice = reader.nextDouble();
-			                break;  // Exit the loop if input is successfully read
-			            } catch (InputMismatchException e) {
-			                System.out.println("	Error: Price must be a number, try again");
-			                reader.next();  // Clear the invalid input from scanner
-			            }
-			        } while (true); 
-					
-					
-					//item category
-			        String category;
-			        while (true) {
-			            System.out.println("	Enter item category (kids, electricity, office, clothes): ");
-			            category = reader.next();
-			            if (Categories.contains(category.toLowerCase())) {
-			                break;
-			            } else {
-			                System.out.println("	Invalid category. Please choose again.");
-			            }
-			        }
-					
-					System.out.println("	Does the product have a special wrap? (yes/no): ");
-			        String specialWrap = reader.next();
-					while(!specialWrap.toLowerCase().equals("yes") && !specialWrap.toLowerCase().equals("no")) {
-						//enter if answer isn't yes or no is wrong exit if category is right
-						System.out.println("	Wrong answer choose again");
-						System.out.println("	Does the product have a special wrap? (yes/no): ");
-						specialWrap = reader.next();
-					}
-			        Product product;
-			        //check for wrap if yes get added cost else normal product
-			        if (specialWrap.toLowerCase().equals("yes")) {
-			            System.out.println("	Enter the additional cost for the special wrap: ");
-			            double addedCost;
-			            do {
-				            try {
-				                System.out.print("	Enter the price: ");
-				                addedCost = reader.nextDouble();
-				                break;  // Exit the loop if input is successfully read
-				            } catch (InputMismatchException e) {
-				                System.out.println("	Error: Price must be a number, try again");
-				                reader.next();  // Clear the invalid input from scanner
-				            }
-				        } while (true); 
-			            product = new SpecialProduct(item, itemPrice, category, true, addedCost);
-			        } 
-			        else {
-			            product = new Product(item, itemPrice, category);
-			        }
-					// add product to seller
-			        tempSeller = (Seller)management.getHumans()[sellerIndex]; // same casting as before
-					tempSeller.addProduct(product);
-					System.out.println("	[Product added]");
-					break;
-				}
+				addProductToSeller(management);
+				break;
 				
 			case 4:
 				//case 4 add item to buyer
