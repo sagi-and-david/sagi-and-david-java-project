@@ -38,6 +38,12 @@ public class Management{
 		}
 	}
 
+	public void reset(){
+		this.humans = new Human[10];
+		this.humansCount = 0;
+		this.sellersCount = 0;
+		this.buyersCount = 0;
+	}
 	public String displayHumans(boolean isBuyer) {
 		
 		String printText = "";

@@ -1,6 +1,8 @@
 //Sagi Galian 214804445
 //David Bekker 328088521
 //teacher: Eyal Eisenstein
+import javax.print.attribute.standard.JobKOctets;
+import java.util.IllegalFormatCodePointException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -61,24 +63,19 @@ public class Main {
 		int sellerIndex = -1;
 
 		while(exitFlag) {
-			
-			//menu
 			menu();
-			
 			//get input
-			
-			
 			do {
-	            try {
-	                System.out.print("Enter the Command: ");
-	    			command = reader.nextInt();
-	                break;  // Exit the loop if input is successfully read
-	            } catch (InputMismatchException e) {
-	                System.out.println("Error: Command must be an integer, try again");
-	                reader.next();  // Clear the invalid input from scanner
-	            }
-	        } while (true); 
-			
+				try {
+					System.out.print("Enter the Command: ");
+					command = reader.nextInt();
+					break;  // Exit the loop if input is successfully read
+				} catch (InputMismatchException e) {
+					System.out.println("Error: Command must be an integer, try again");
+					reader.next();  // Clear the invalid input from scanner
+				}
+			} while (true);
+
 			//reset leaveMode flag
 			leaveMode = false;
 			//switch case between the different commands
@@ -173,13 +170,10 @@ public class Main {
 						//add item to seller
 						//if no sellers available quit and leave a message
 						
-<<<<<<< HEAD
 						System.out.println("	choose seller (an existing one, Type quit to cancel): ");
 						management.displayHumans(false);
-=======
 						System.out.println("choose seller (an existing one, Type quit to cancel): ");
 						System.out.println(management.displayHumans(false));
->>>>>>> fe675c540e1e9dd1b26b3a914a5188d87d932ae4
 						//seller name
 						sellerName = reader.next();
 						if (sellerName.equals("quit".toLowerCase())) {
@@ -270,13 +264,10 @@ public class Main {
 				System.out.println("[Adding product to buyer] fill the details below");
 				while(buyerIndex == -1) {
 					//loop choose existing buyer
-<<<<<<< HEAD
 					System.out.println("	choose buyer (Type quit to cancel): ");
 					management.displayHumans(true);
-=======
 					System.out.println("choose buyer (Type quit to cancel): ");
 					System.out.println(management.displayHumans(true));
->>>>>>> fe675c540e1e9dd1b26b3a914a5188d87d932ae4
 					//buyer name
 					buyerName = reader.next();
 					if (buyerName.equals("quit".toLowerCase())) {
@@ -289,13 +280,10 @@ public class Main {
 				sellerIndex = -1;
 				while(sellerIndex == -1 && leaveMode == false) {
 					//loop choose existing seller
-<<<<<<< HEAD
 					System.out.println("	Choose seller: ");
 					management.displayHumans(false);
-=======
 					System.out.println("choose seller: ");
 					System.out.println(management.displayHumans(false));
->>>>>>> fe675c540e1e9dd1b26b3a914a5188d87d932ae4
 					//seller name
 					sellerName = reader.next();
 					sellerIndex = management.findSellerOrBuyerIndexByName(sellerName, false);
@@ -334,10 +322,15 @@ public class Main {
 				}
 				break;
 
-			case 5:	
+			case 5:
+				System.out.println("[Costumer Pay] Fill the details below");
+				if (management.getBuyersCount() == 0){
+					System.out.println("	There are no Costumers availble to pay with.");
+					break;
+				}
 				while(!leaveMode) {
 					System.out.println(management.displayHumans(true));
-					System.out.print("Enter buyer's name (Type quit to cancel): ");
+					System.out.print("	Enter buyer's name (Type quit to cancel): ");
 					buyerName = reader.next();
 					if (buyerName.equals("quit".toLowerCase())) {
 						leaveMode = true;
@@ -345,7 +338,7 @@ public class Main {
 					}
 					buyerIndex = management.findSellerOrBuyerIndexByName(buyerName, true);
 					if(buyerIndex == -1) {
-						System.out.println("Buyer doesnt exists!, try again.");
+						System.out.println("	Buyer doesnt exists!, try again.");
 					}
 					else {
 						break;
@@ -361,11 +354,11 @@ public class Main {
 				Buyer buyer = (Buyer)management.getHumans()[buyerIndex];
 				try {
 		            if (buyer.getProductsCount() == 0) {
-		                throw new Exception("The cart is empty!");
+		                throw new Exception("	The cart is empty!");
 		            } else {
-		                System.out.println("Here is your cart: ");
+		                System.out.println("	Here is your cart: ");
 		                System.out.println(buyer.displayProducts());
-		                System.out.println("Total price of: " + buyer.cartPrice());
+		                System.out.println("	Total price of: " + buyer.cartPrice());
 		                buyer.moveToPreviousCarts();
 		            }
 		        } catch (Exception e) {
@@ -374,10 +367,12 @@ public class Main {
 				break;
 			case 6:
 				//case 6 show all buyers
-				System.out.print(management.displayBuyersWithCart());
+				System.out.println("[All Buyers With Their Carts]");
+				System.out.println(management.displayBuyersWithCart());
 				break;
 			case 7:
 				//case 7 show all sellers
+				System.out.println("[All Sellers With Their Products]");
 				System.out.println(management.displaySellersWithProducts());
 				break;
 			
@@ -460,24 +455,25 @@ public class Main {
 				
 				
 				break;
-
-				case 10:
-					int botsAmount = 5;
-					// adding sellers.
-					int basePrice = 50;
-					for(int i = 0; i < botsAmount; i++){
-						management.addHuman("Sellerbot" + i, "password" + i, null);
-						Seller tmpSeller = (Seller)management.getHumans()[i];
-						tmpSeller.addProduct(new Product("productExample" + i, i + basePrice, "category" + i));
-					}
-					//adding buyers.
-					for(int i = 0; i < botsAmount; i++){
-						management.addHuman("Buyerbot" + i, "password" + i, "address" + i);
-						Buyer tmpBuyer = (Buyer)management.getHumans()[botsAmount + i];
-						tmpBuyer.addProduct("productExample"+i, i + basePrice, "category" + i);
-					}
-					System.out.println("[Added bots] - 5 sellers - 5 buyers - each with one product.");
-					break;
+			case 10:
+				System.out.println("[Creating Bots] notice this is 'demo mode' for checking, your real data will get lost");
+				management.reset();
+				int botsAmount = 5;
+				// adding sellers.
+				int basePrice = 50;
+				for(int i = 0; i < botsAmount; i++){
+					management.addHuman("Sellerbot" + i, "password" + i, null);
+					Seller tmpSeller = (Seller)management.getHumans()[i];
+					tmpSeller.addProduct(new Product("productExample" + i, i + basePrice, "kids"));
+				}
+				//adding buyers.
+				for(int i = 0; i < botsAmount; i++){
+					management.addHuman("Buyerbot" + i, "password" + i, "address" + i);
+					Buyer tmpBuyer = (Buyer)management.getHumans()[botsAmount + i];
+					tmpBuyer.addProduct("productExample"+i, i + basePrice, "kids");
+				}
+				System.out.println("[Added bots] - 5 sellers - 5 buyers - each with one product.");
+				break;
 			}
 
 		}
