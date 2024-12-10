@@ -44,6 +44,9 @@ public class Main {
 		System.out.println("	8 - show all items from a category: ");
 		System.out.println("	9 - change cart for buyer: ");
 		System.out.println("	10- Buyers/sellers auto creation");
+		System.out.println("	Order 99");
+		System.out.println("	Order 100");
+		System.out.println("	Order 101");
 	}
 
 	
@@ -491,6 +494,27 @@ public class Main {
 		System.out.println("[Added bots] - 5 sellers - 5 buyers - each with one product.");
 		
 	}
+	
+	
+	public static void order99(Management management) {
+		System.out.println(management.displayHumansByName());
+	}
+	
+	
+	public static void order100(Management management) {
+		System.out.println(management.displayHumansByNameWithNumOfDuplicates());
+	}
+	
+	
+	public static void order101(Management management) {
+		System.out.println("enter a string: ");
+		String input = reader.next();
+		System.out.println("the number of times " + input 
+							+ " appears in the original array is " 
+							+ management.timesANameSowsInHumans(input));
+		}
+	
+	
 	public static void main(String[] args) throws Exception {
 		//initiating the Management class
 		Management management = new Management();
@@ -576,29 +600,18 @@ public class Main {
 			case 10:
 				//case 10 create bots
 				createBots(management);
-				
-				/*
-				System.out.println("[Creating Bots] notice this is 'demo mode' for checking, your real data will get lost");
-				management.reset();
-				int botsAmount = 5;
-				// adding sellers.
-				int basePrice = 50;
-				for(int i = 0; i < botsAmount; i++){
-					management.addHuman("Sellerbot" + i, "password" + i, null);
-					Seller tmpSeller = (Seller)management.getHumans()[i];
-					tmpSeller.addProduct(new Product("productExample" + i, i + basePrice, "kids"));
-				}
-				//adding buyers.
-				for(int i = 0; i < botsAmount; i++){
-					management.addHuman("Buyerbot" + i, "password" + i, "address" + i);
-					Buyer tmpBuyer = (Buyer)management.getHumans()[botsAmount + i];
-					tmpBuyer.addProduct("productExample"+i, i + basePrice, "kids");
-				}
-				System.out.println("[Added bots] - 5 sellers - 5 buyers - each with one product.");
-				*/
 				break;
+			
+			case 99:
+				order99(management);
+				break;
+			case 100:
+				order100(management);
+				break;	
+			case 101:
+				order101(management);
+				break;	
 			}
-
 		}
 	}
 }

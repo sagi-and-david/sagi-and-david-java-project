@@ -1,12 +1,12 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+
 
 public class Management{
 
 	int humansCount;
 	Human[] humans;
+	List<String> uniqueStrings = new ArrayList<>();
+    Map<String, Integer> countMap = new HashMap<>();
 	int sellersCount;
 	int buyersCount;
 	
@@ -44,6 +44,53 @@ public class Management{
 		this.sellersCount = 0;
 		this.buyersCount = 0;
 	}
+	
+	
+	public String displayHumansByName() {
+		String printText = "";
+		for (int i = 0; i < this.humans.length; i++) {
+			//using the get methods in the Buyer class
+			if (this.humans[i] == null) {
+				break;
+			}
+			printText += this.humans[i].getName() + "\n";
+		}
+		return printText;
+	}
+	
+	
+	public String displayHumansByNameWithNumOfDuplicates() {
+		
+		String printText = "";
+		
+		for (Human human : this.humans) {
+			if(human == null) break;
+            String lowerCaseStr = human.getName().toLowerCase();
+            // add to list without duplicate
+            if (!uniqueStrings.contains(lowerCaseStr)) {
+                uniqueStrings.add(lowerCaseStr);
+            }
+            // count num of shows
+            countMap.put(lowerCaseStr, countMap.getOrDefault(lowerCaseStr, 0) + 1);
+        }
+		
+		for (String str : uniqueStrings) {
+            printText += str + " .........." + countMap.get(str) + "\n";
+        }
+		return printText;
+	}
+	
+	
+	public int timesANameSowsInHumans(String str) {
+		int count = 0;
+		for(Human human : this.humans) {
+			if(human == null) break;
+			if(human.getName().equals(str)) count++;
+		}
+		return count;
+	}
+	
+	
 	public String displayHumans(boolean isBuyer) {
 		
 		String printText = "";
