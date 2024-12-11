@@ -5,8 +5,10 @@ public class Management{
 
 	int humansCount;
 	Human[] humans;
-	List<String> uniqueStrings = new ArrayList<>();
+	Set<String> uniqueStrings = new LinkedHashSet<>();
     Map<String, Integer> countMap = new HashMap<>();
+	List<String> doubleNames = new ArrayList<>();
+	Set<String> sortedNames = new TreeSet<>(new StringLenComparator());
 	int sellersCount;
 	int buyersCount;
 	
@@ -36,6 +38,9 @@ public class Management{
 			this.humansCount++;
 			this.buyersCount++;
 		}
+
+		updateUniqueStringsSet();
+		updateDoulbeNames();
 	}
 
 	public void reset(){
@@ -57,37 +62,30 @@ public class Management{
 		}
 		return printText;
 	}
-	
-	
-	public String displayHumansByNameWithNumOfDuplicates() {
-		
-		String printText = "";
-		
-		for (Human human : this.humans) {
-			if(human == null) break;
-            String lowerCaseStr = human.getName().toLowerCase();
-            // add to list without duplicate
-            if (!uniqueStrings.contains(lowerCaseStr)) {
-                uniqueStrings.add(lowerCaseStr);
-            }
-            // count num of shows
-            countMap.put(lowerCaseStr, countMap.getOrDefault(lowerCaseStr, 0) + 1);
-        }
-		
-		for (String str : uniqueStrings) {
-            printText += str + " .........." + countMap.get(str) + "\n";
-        }
-		return printText;
-	}
-	
-	
-	public int timesANameSowsInHumans(String str) {
-		int count = 0;
-		for(Human human : this.humans) {
-			if(human == null) break;
-			if(human.getName().equals(str)) count++;
+
+	public void updateDoulbeNames(){
+		doubleNames.clear();
+		for(String curr: uniqueStrings){
+			doubleNames.add(curr);
+			doubleNames.add(curr);
 		}
-		return count;
+	}
+
+	public void orderHumanByTheLengthOfTheName(){
+		for(Human h: humans){
+			if (h == null)  return;
+			sortedNames.add(h.getName().toUpperCase());
+		}
+	}
+
+	public void updateUniqueStringsSet() {
+		countMap.clear();
+		String lowerName = "";
+		for(int i = 0; i < humansCount; i++){
+			lowerName = humans[i].getName().toLowerCase();
+			uniqueStrings.add(lowerName);
+			countMap.put(lowerName, countMap.getOrDefault(lowerName, 0) + 1);
+		}
 	}
 	
 	
