@@ -3,9 +3,8 @@
 //teacher: Eyal Eisenstein
 import javax.print.attribute.standard.JobKOctets;
 import java.security.KeyStore;
-import java.util.IllegalFormatCodePointException;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
+
 
 public class Main {
 	//variables
@@ -47,6 +46,8 @@ public class Main {
 		System.out.println("	Order 99");
 		System.out.println("	Order 100");
 		System.out.println("	Order 101");
+		System.out.println("	Order 102");
+		System.out.println("	Order 103");
 	}
 
 	
@@ -511,8 +512,28 @@ public class Main {
 		String input = reader.next();
 		System.out.println("the number of times " + input 
 							+ " appears in the original array is " 
-							+ management.timesANameSowsInHumans(input));
+							+ management.timesANameShowsInHumans(input));
 		}
+	
+	
+	public static void order102(Management management) {
+		ArrayList<String> arraylist = management.humansWithOutDuplicatesWithArrayList();
+		ListIterator<String> it = arraylist.listIterator();
+		//go to the end
+		while(it.hasNext()) {
+			it.next();
+		}
+		//go backwards
+		while(it.hasPrevious()) {
+			System.out.println(it.previous() + "\n");
+		}
+	}
+	
+	
+	public static void order103(Management management) {
+		String humansList = management.allHumansFromTreeSet();
+		System.out.println(humansList.toUpperCase());
+	}
 	
 	
 	public static void main(String[] args) throws Exception {
@@ -611,6 +632,12 @@ public class Main {
 			case 101:
 				order101(management);
 				break;	
+			case 102:
+				order102(management);
+				break;
+			case 103:
+				order103(management);
+				break;
 			}
 		}
 	}

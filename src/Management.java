@@ -5,8 +5,9 @@ public class Management{
 
 	int humansCount;
 	Human[] humans;
-	List<String> uniqueStrings = new ArrayList<>();
+	Set<String> uniqueStrings = new HashSet<>();
     Map<String, Integer> countMap = new HashMap<>();
+    Set<Human> humansTreeSet = new TreeSet<>(new HumanNameLenComparator());
 	int sellersCount;
 	int buyersCount;
 	
@@ -23,23 +24,36 @@ public class Management{
 		return humans;
 	}
 	
-	public void addHuman(String name, String password, String address) { // if address is null the human is seller
+	public void addHuman(String name, String password, String address) { 
 		if (this.humansCount >= this.humans.length) {
-			this.expandHumansArray();
-		}
-		if (address == null) {
-			this.humans[humansCount] = new Seller(name, password);
-			this.humansCount++;
-			this.sellersCount++;
-		}else {
-			this.humans[humansCount] = new Buyer(name, password, address);
-			this.humansCount++;
-			this.buyersCount++;
-		}
+	        this.expandHumansArray();
+	    }
+	    Human newHuman;
+	    if (address == null) {
+	        newHuman = new Seller(name, password);
+	        this.sellersCount++;
+	    } else {
+	        newHuman = new Buyer(name, password, address);
+	        this.buyersCount++;
+	    }
+	    this.humans[humansCount++] = newHuman;
+
+	    // Only add non-null humans
+	    if (newHuman != null) {
+	        this.humansTreeSet.add(newHuman);
+	        String lowerCaseStr = newHuman.getName().toLowerCase();
+	        this.uniqueStrings.add(lowerCaseStr);
+	        this.countMap.put(lowerCaseStr, countMap.getOrDefault(lowerCaseStr, 0) + 1);
+	    }
+
+	    
 	}
 
 	public void reset(){
 		this.humans = new Human[10];
+		this.uniqueStrings.clear();;
+	    this.countMap.clear();
+	    this.humansTreeSet.clear();;
 		this.humansCount = 0;
 		this.sellersCount = 0;
 		this.buyersCount = 0;
@@ -63,31 +77,35 @@ public class Management{
 		
 		String printText = "";
 		
-		for (Human human : this.humans) {
-			if(human == null) break;
-            String lowerCaseStr = human.getName().toLowerCase();
-            // add to list without duplicate
-            if (!uniqueStrings.contains(lowerCaseStr)) {
-                uniqueStrings.add(lowerCaseStr);
-            }
-            // count num of shows
-            countMap.put(lowerCaseStr, countMap.getOrDefault(lowerCaseStr, 0) + 1);
-        }
-		
-		for (String str : uniqueStrings) {
-            printText += str + " .........." + countMap.get(str) + "\n";
+		for (String str : this.uniqueStrings) {
+            printText += str + " .........." + this.countMap.get(str) + "\n";
         }
 		return printText;
 	}
 	
 	
-	public int timesANameSowsInHumans(String str) {
-		int count = 0;
-		for(Human human : this.humans) {
-			if(human == null) break;
-			if(human.getName().equals(str)) count++;
+	public int timesANameShowsInHumans(String str) {
+	    return this.countMap.getOrDefault(str.toLowerCase(), 0);
+	}
+	
+	
+	public ArrayList<String> humansWithOutDuplicatesWithArrayList(){
+		ArrayList<String> arraylist = new ArrayList<>();
+		for(String nameEntery : this.countMap.keySet()) {
+			arraylist.add(nameEntery);
+			arraylist.add(nameEntery);
 		}
-		return count;
+		return arraylist;
+	}
+	
+	
+	public String allHumansFromTreeSet() {
+		StringBuilder printText = new StringBuilder();
+		Iterator<Human> humansTreeSetIterator = this.humansTreeSet.iterator(); 
+		while(humansTreeSetIterator.hasNext())
+			 printText.append((humansTreeSetIterator.next().getName())).append("\n");
+		return printText.toString();
+		
 	}
 	
 	
