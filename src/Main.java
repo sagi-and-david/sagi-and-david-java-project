@@ -4,7 +4,10 @@
 import javax.print.attribute.standard.JobKOctets;
 import java.security.KeyStore;
 import java.util.*;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 926750609378702dafe8f16d3265cd9596d62f30
 
 public class Main {
 	//variables
@@ -43,11 +46,19 @@ public class Main {
 		System.out.println("	8 - show all items from a category: ");
 		System.out.println("	9 - change cart for buyer: ");
 		System.out.println("	10- Buyers/sellers auto creation");
+<<<<<<< HEAD
 		System.out.println("	Order 99");
 		System.out.println("	Order 100");
 		System.out.println("	Order 101");
 		System.out.println("	Order 102");
 		System.out.println("	Order 103");
+=======
+		System.out.println("	99- Display names by order in the array");
+		System.out.println("	100-Display names by order in the array no duplicates");
+		System.out.println("	101-Get number of duplicates for a given name");
+		System.out.println("	102-Double each name into an arraylist");
+		System.out.println("	103-Print names by length.");
+>>>>>>> 926750609378702dafe8f16d3265cd9596d62f30
 	}
 
 	
@@ -497,22 +508,47 @@ public class Main {
 	}
 	
 	
-	public static void order99(Management management) {
+	public static void printHumanNamesByOrder(Management management) {
 		System.out.println(management.displayHumansByName());
 	}
 	
 	
-	public static void order100(Management management) {
-		System.out.println(management.displayHumansByNameWithNumOfDuplicates());
+	public static void printHumanNamesByOrderNoDuplicates(Management management) {
+		Iterator<String> iter = management.uniqueStrings.iterator();
+		String currStr = "";
+		while(iter.hasNext()){
+			currStr = iter.next();
+			System.out.println(currStr + "........" + management.countMap.get(currStr));
+		}
+	}
+
+	public static void insertEachNameTwiceIntoArrayListAndDisplay(Management management){
+		ListIterator<String> listIter = management.doubleNames.listIterator(management.doubleNames.size());
+		while (listIter.hasPrevious()){
+			System.out.println(listIter.previous());
+		}
+	}
+
+	public static void buildTreeSet(Management management){
+		management.orderHumanByTheLengthOfTheName();
+		Iterator<String> iter = management.sortedNames.iterator();
+        while(iter.hasNext()){
+			System.out.println(iter.next());
+        }
 	}
 	
-	
-	public static void order101(Management management) {
+	public static void getNumberOfDuplicatesByGivenName(Management management) {
+
 		System.out.println("enter a string: ");
 		String input = reader.next();
+		Integer times = management.countMap.get(input.toLowerCase());
 		System.out.println("the number of times " + input 
 							+ " appears in the original array is " 
+<<<<<<< HEAD
 							+ management.timesANameShowsInHumans(input));
+=======
+							+ (times == null? 0: times));
+>>>>>>> 926750609378702dafe8f16d3265cd9596d62f30
 		}
 	
 	
@@ -624,19 +660,29 @@ public class Main {
 				break;
 			
 			case 99:
-				order99(management);
+				printHumanNamesByOrder(management);
 				break;
 			case 100:
-				order100(management);
+				printHumanNamesByOrderNoDuplicates(management);
 				break;	
 			case 101:
-				order101(management);
+				getNumberOfDuplicatesByGivenName(management);
 				break;	
+<<<<<<< HEAD
 			case 102:
 				order102(management);
 				break;
 			case 103:
 				order103(management);
+=======
+
+			case 102:
+				insertEachNameTwiceIntoArrayListAndDisplay(management);
+				break;
+
+			case 103:
+				buildTreeSet(management);
+>>>>>>> 926750609378702dafe8f16d3265cd9596d62f30
 				break;
 			}
 		}

@@ -5,9 +5,16 @@ public class Management{
 
 	int humansCount;
 	Human[] humans;
+<<<<<<< HEAD
 	Set<String> uniqueStrings = new HashSet<>();
     Map<String, Integer> countMap = new HashMap<>();
     Set<Human> humansTreeSet = new TreeSet<>(new HumanNameLenComparator());
+=======
+	Set<String> uniqueStrings = new LinkedHashSet<>();
+    Map<String, Integer> countMap = new HashMap<>();
+	List<String> doubleNames = new ArrayList<>();
+	Set<String> sortedNames = new TreeSet<>(new StringLenComparator());
+>>>>>>> 926750609378702dafe8f16d3265cd9596d62f30
 	int sellersCount;
 	int buyersCount;
 	
@@ -26,6 +33,7 @@ public class Management{
 	
 	public void addHuman(String name, String password, String address) { 
 		if (this.humansCount >= this.humans.length) {
+<<<<<<< HEAD
 	        this.expandHumansArray();
 	    }
 	    Human newHuman;
@@ -47,6 +55,22 @@ public class Management{
 	    }
 
 	    
+=======
+			this.expandHumansArray();
+		}
+		if (address == null) {
+			this.humans[humansCount] = new Seller(name, password);
+			this.humansCount++;
+			this.sellersCount++;
+		}else {
+			this.humans[humansCount] = new Buyer(name, password, address);
+			this.humansCount++;
+			this.buyersCount++;
+		}
+
+		updateUniqueStringsSet();
+		updateDoulbeNames();
+>>>>>>> 926750609378702dafe8f16d3265cd9596d62f30
 	}
 
 	public void reset(){
@@ -71,6 +95,7 @@ public class Management{
 		}
 		return printText;
 	}
+<<<<<<< HEAD
 	
 	
 	public String displayHumansByNameWithNumOfDuplicates() {
@@ -106,6 +131,32 @@ public class Management{
 			 printText.append((humansTreeSetIterator.next().getName())).append("\n");
 		return printText.toString();
 		
+=======
+
+	public void updateDoulbeNames(){
+		doubleNames.clear();
+		for(String curr: uniqueStrings){
+			doubleNames.add(curr);
+			doubleNames.add(curr);
+		}
+	}
+
+	public void orderHumanByTheLengthOfTheName(){
+		for(Human h: humans){
+			if (h == null)  return;
+			sortedNames.add(h.getName().toUpperCase());
+		}
+	}
+
+	public void updateUniqueStringsSet() {
+		countMap.clear();
+		String lowerName = "";
+		for(int i = 0; i < humansCount; i++){
+			lowerName = humans[i].getName().toLowerCase();
+			uniqueStrings.add(lowerName);
+			countMap.put(lowerName, countMap.getOrDefault(lowerName, 0) + 1);
+		}
+>>>>>>> 926750609378702dafe8f16d3265cd9596d62f30
 	}
 	
 	
